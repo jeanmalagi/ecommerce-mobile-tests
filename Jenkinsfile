@@ -311,54 +311,116 @@ pipeline {
             }
         }
 
+        stage('Install Maestro CLI') {
+            steps {
+                powershell '''
+                $ErrorActionPreference = 'Stop'
+
+                if (-not (Get-Command java -ErrorAction SilentlyContinue)) {
+                    throw "Java nao encontrado no agente Jenkins. O Maestro CLI requer Java 17+."
+                }
+
+                $maestroBin = $null
+                $systemMaestro = Get-Command maestro -ErrorAction SilentlyContinue
+                if ($systemMaestro) {
+                    $maestroBin = $systemMaestro.Source
+                    Write-Host "Usando Maestro global: $maestroBin"
+                }
+                else {
+                    $toolsDir = Join-Path $env:WORKSPACE '.tools'
+                    $maestroDir = Join-Path $toolsDir 'maestro'
+                    $maestroZip = Join-Path $toolsDir 'maestro.zip'
+
+                    New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null
+
+                    Write-Host "Baixando Maestro CLI para o workspace..."
+                    Invoke-WebRequest -Uri 'https://github.com/mobile-dev-inc/maestro/releases/latest/download/maestro.zip' -OutFile $maestroZip -UseBasicParsing
+
+                    if (Test-Path $maestroDir) {
+                        Remove-Item -Path $maestroDir -Recurse -Force
+                    }
+
+                    Expand-Archive -Path $maestroZip -DestinationPath $maestroDir -Force
+
+                    $candidates = @(
+                        (Join-Path $maestroDir 'bin/maestro.bat'),
+                        (Join-Path $maestroDir 'bin/maestro.cmd'),
+                        (Join-Path $maestroDir 'maestro.exe'),
+                        (Join-Path $maestroDir 'bin/maestro.exe'),
+                        (Join-Path $maestroDir 'bin/maestro')
+                    )
+
+                    foreach ($candidate in $candidates) {
+                        if (Test-Path $candidate) {
+                            $maestroBin = $candidate
+                            break
+                        }
+                    }
+
+                    if (-not $maestroBin) {
+                        throw "Nao foi possivel localizar o executavel do Maestro apos extrair maestro.zip."
+                    }
+
+                    Write-Host "Maestro local instalado em: $maestroBin"
+                }
+
+                $wrapperPath = Join-Path $env:WORKSPACE 'maestro-local.cmd'
+                $wrapperContent = "@echo off`r`n\"$maestroBin\" %*`r`n"
+                Set-Content -Path $wrapperPath -Value $wrapperContent -Encoding ASCII
+
+                & $wrapperPath --version
+                '''
+            }
+        }
+
         stage('Run Maestro Tests') {
             steps {
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat 'maestro test .maestro/flows/auth/login-admin.yaml --format junit --output test-results/login-admin.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-admin.yaml --format junit --output test-results/login-admin.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat 'maestro test .maestro/flows/auth/login-cliente.yaml --format junit --output test-results/login-cliente.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-cliente.yaml --format junit --output test-results/login-cliente.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat 'maestro test .maestro/flows/auth/login-credenciais-invalidas.yaml --format junit --output test-results/login-invalido.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-credenciais-invalidas.yaml --format junit --output test-results/login-invalido.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat 'maestro test .maestro/flows/auth/register.yaml --format junit --output test-results/register.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/auth/register.yaml --format junit --output test-results/register.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat 'maestro test .maestro/flows/customer/browse-products.yaml --format junit --output test-results/browse-products.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/customer/browse-products.yaml --format junit --output test-results/browse-products.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat 'maestro test .maestro/flows/customer/add-to-cart.yaml --format junit --output test-results/add-to-cart.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/customer/add-to-cart.yaml --format junit --output test-results/add-to-cart.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat 'maestro test .maestro/flows/customer/remove-from-cart.yaml --format junit --output test-results/remove-from-cart.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/customer/remove-from-cart.yaml --format junit --output test-results/remove-from-cart.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat 'maestro test .maestro/flows/customer/checkout.yaml --format junit --output test-results/checkout.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/customer/checkout.yaml --format junit --output test-results/checkout.xml'
                     }
                 }
             }
