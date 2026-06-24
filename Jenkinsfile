@@ -365,7 +365,7 @@ pipeline {
                 }
 
                 $wrapperPath = Join-Path $env:WORKSPACE 'maestro-local.cmd'
-                $wrapperContent = "@echo off`r`n\"$maestroBin\" %*`r`n"
+                $wrapperContent = [string]::Format('@echo off`r`n"{0}" %*`r`n', $maestroBin)
                 Set-Content -Path $wrapperPath -Value $wrapperContent -Encoding ASCII
 
                 & $wrapperPath --version
