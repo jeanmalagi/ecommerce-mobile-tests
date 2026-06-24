@@ -6,7 +6,7 @@ pipeline {
         CI          = 'true'
         EXPO_URL    = 'exp://192.168.1.100:8081'
         API_URL     = 'http://192.168.1.100:3000'
-        ANDROID_AVD = 'Pixel_6_API_34'
+        ANDROID_AVD = 'Small_Phone'
     }
 
     options {
@@ -41,33 +41,29 @@ pipeline {
 
         stage('Wait for API') {
             steps {
-                bat '''
-                @echo off
-                setlocal EnableDelayedExpansion
+                powershell '''
+                $maxRetries = 20
 
-                set RETRY=0
+                for ($i = 0; $i -lt $maxRetries; $i++) {
+                    try {
+                        $response = Invoke-WebRequest `
+                            -Uri "http://localhost:3000/api/products" `
+                            -UseBasicParsing `
+                            -TimeoutSec 5
 
-                :loop
+                        if ($response.StatusCode -eq 200) {
+                            Write-Host "API pronta"
+                            exit 0
+                        }
+                    }
+                    catch {
+                        Write-Host "Aguardando API..."
+                    }
 
-                curl http://localhost:3000/api/products >nul 2>&1
+                    Start-Sleep -Seconds 3
+                }
 
-                if !ERRORLEVEL!==0 (
-                    echo API pronta
-                    goto end
-                )
-
-                set /A RETRY+=1
-
-                if !RETRY! GEQ 20 (
-                    echo API nao subiu
-                    exit /b 1
-                )
-
-                timeout /t 3 >nul
-
-                goto loop
-
-                :end
+                throw "API nao subiu"
                 '''
             }
         }
