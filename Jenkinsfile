@@ -187,14 +187,14 @@ pipeline {
                 }
 
                 if ($sdkRoot -match '^(?<userProfile>.+)\\AppData\\Local\\Android\\Sdk$') {
-                    $candidateAvdHomes += (Join-Path $matches.userProfile '.android\avd')
+                    $candidateAvdHomes += (Join-Path $matches.userProfile '.android/avd')
 
                     if (-not $env:HOME) {
                         $env:HOME = $matches.userProfile
                     }
                 }
 
-                $candidateAvdHomes += (Join-Path $env:USERPROFILE '.android\avd')
+                $candidateAvdHomes += (Join-Path $env:USERPROFILE '.android/avd')
                 $candidateAvdHomes = @($candidateAvdHomes | Where-Object { $_ } | Select-Object -Unique)
 
                 foreach ($candidateAvdHome in $candidateAvdHomes) {
