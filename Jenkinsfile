@@ -29,12 +29,52 @@ pipeline {
                         branch: 'main'
                 }
 
-                bat '''
-                cd ecommerce-fullstack
+                powershell '''
+                $ErrorActionPreference = 'Stop'
 
-                docker compose down -v
+                function Test-DockerReady {
+                    try {
+                        docker info *> $null
+                        return $true
+                    }
+                    catch {
+                        return $false
+                    }
+                }
 
-                docker compose up -d --build
+                if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+                    throw "Docker CLI nao encontrado no agente Jenkins. Instale Docker e exponha o comando 'docker' no PATH."
+                }
+
+                if (-not (Test-DockerReady)) {
+                    $dockerService = Get-Service -Name 'com.docker.service' -ErrorAction SilentlyContinue
+
+                    if ($dockerService -and $dockerService.Status -ne 'Running') {
+                        Write-Host "Servico do Docker encontrado, tentando iniciar..."
+                        Start-Service -Name 'com.docker.service'
+
+                        for ($i = 0; $i -lt 12; $i++) {
+                            if (Test-DockerReady) {
+                                break
+                            }
+
+                            Start-Sleep -Seconds 5
+                        }
+                    }
+                }
+
+                if (-not (Test-DockerReady)) {
+                    throw "Docker daemon indisponivel para o agente Jenkins. O job precisa rodar em um no com Docker Engine acessivel ao usuario do servico Jenkins."
+                }
+
+                Push-Location 'ecommerce-fullstack'
+                try {
+                    docker compose down -v
+                    docker compose up -d --build
+                }
+                finally {
+                    Pop-Location
+                }
                 '''
             }
         }
