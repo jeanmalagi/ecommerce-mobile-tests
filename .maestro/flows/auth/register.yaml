@@ -1,0 +1,52 @@
+# Cenario: Cadastro de novo usuario com sucesso
+# Use email unico em cada execucao para evitar conflitos
+appId: host.exp.exponent
+---
+- launchApp:
+    clearState: true
+
+- runFlow: ../_helpers/open-project-in-expo-go.yaml
+
+- extendedWaitUntil:
+    visible: "Bem-vindo de volta"
+    timeout: 30000
+
+- assertVisible: "Bem-vindo de volta"
+- tapOn:
+    id: "btn-criar-conta"
+- tapOn:
+    text: "Criar conta"
+    optional: true
+
+- extendedWaitUntil:
+    visible:
+      id: "register-title"
+    timeout: 30000
+
+- assertVisible:
+    id: "register-title"
+
+- evalScript: ${output.registerEmail = 'usuario.teste+' + Date.now() + '@email.com'}
+- tapOn:
+    id: "register-input-nome"
+- inputText: "Usuario Teste"
+- hideKeyboard
+
+- tapOn:
+    id: "register-input-email"
+- inputText: ${output.registerEmail}
+- hideKeyboard
+
+- tapOn:
+    id: "register-input-senha"
+- inputText: "123456"
+- hideKeyboard
+
+- tapOn: "Cadastrar"
+- assertVisible: "Conta criada com sucesso"
+- tapOn:
+    text: "OK"
+    optional: true
+- tapOn:
+    text: "Ok"
+    optional: true

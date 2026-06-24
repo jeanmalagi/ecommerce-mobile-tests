@@ -1,0 +1,27 @@
+# Subflow reutilizavel: Login como administrador
+# Deve ser chamado a partir de um fluxo principal com app iniciado
+appId: host.exp.exponent
+---
+
+- tapOn:
+    text: "Bottom Sheet backdrop"
+    optional: true
+
+- tapOn:
+    text: "Ecommerce Mobile"
+    optional: true
+
+- runFlow:
+    when:
+      visible:
+        id: "input-email"
+    file: ./fill-admin-credentials.yaml
+
+- hideKeyboard
+
+- tapOn:
+    id: "btn-entrar"
+    optional: true
+
+- assertVisible:
+    id: "admin-dashboard-title"

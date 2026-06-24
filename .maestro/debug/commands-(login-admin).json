@@ -1,0 +1,2436 @@
+[ {
+  "command" : {
+    "defineVariablesCommand" : {
+      "env" : {
+        "MAESTRO_FILENAME" : "login-admin",
+        "MAESTRO_DEVICE_UDID" : "emulator-5554",
+        "MAESTRO_SHARD_ID" : "1",
+        "MAESTRO_SHARD_INDEX" : "0"
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1782221960635,
+    "duration" : 13,
+    "sequenceNumber" : 0
+  }
+}, {
+  "command" : {
+    "applyConfigurationCommand" : {
+      "config" : {
+        "appId" : "host.exp.exponent"
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1782221960650,
+    "duration" : 0,
+    "sequenceNumber" : 1
+  }
+}, {
+  "command" : {
+    "assertConditionCommand" : {
+      "condition" : {
+        "visible" : {
+          "textRegex" : "MyStore",
+          "optional" : false
+        }
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "FAILED",
+    "timestamp" : 1782221970864,
+    "duration" : 17799,
+    "error" : {
+      "message" : "Assertion is false: \"MyStore\" is visible",
+      "hierarchyRoot" : {
+        "children" : [ {
+          "attributes" : {
+            "ignoreBoundsFiltering" : "false"
+          },
+          "children" : [ {
+            "attributes" : {
+              "ignoreBoundsFiltering" : "false",
+              "clickable" : "false",
+              "bounds" : "[0,0][1080,2400]",
+              "enabled" : "true",
+              "focused" : "false",
+              "checked" : "false",
+              "scrollable" : "false",
+              "selected" : "false",
+              "class" : "android.widget.FrameLayout",
+              "important-for-accessibility" : "true"
+            },
+            "children" : [ {
+              "attributes" : {
+                "ignoreBoundsFiltering" : "false",
+                "clickable" : "false",
+                "bounds" : "[0,0][1080,2337]",
+                "enabled" : "true",
+                "focused" : "false",
+                "checked" : "false",
+                "scrollable" : "false",
+                "selected" : "false",
+                "class" : "android.widget.LinearLayout",
+                "important-for-accessibility" : "false"
+              },
+              "children" : [ {
+                "attributes" : {
+                  "ignoreBoundsFiltering" : "false",
+                  "clickable" : "false",
+                  "bounds" : "[0,132][1080,2337]",
+                  "enabled" : "true",
+                  "focused" : "false",
+                  "checked" : "false",
+                  "scrollable" : "false",
+                  "selected" : "false",
+                  "class" : "android.widget.FrameLayout",
+                  "important-for-accessibility" : "false"
+                },
+                "children" : [ {
+                  "attributes" : {
+                    "ignoreBoundsFiltering" : "false",
+                    "resource-id" : "host.exp.exponent:id/action_bar_root",
+                    "clickable" : "false",
+                    "bounds" : "[0,132][1080,2337]",
+                    "enabled" : "true",
+                    "focused" : "false",
+                    "checked" : "false",
+                    "scrollable" : "false",
+                    "selected" : "false",
+                    "class" : "android.widget.LinearLayout",
+                    "important-for-accessibility" : "false"
+                  },
+                  "children" : [ {
+                    "attributes" : {
+                      "ignoreBoundsFiltering" : "false",
+                      "resource-id" : "android:id/content",
+                      "clickable" : "false",
+                      "bounds" : "[0,132][1080,2337]",
+                      "enabled" : "true",
+                      "focused" : "false",
+                      "checked" : "false",
+                      "scrollable" : "false",
+                      "selected" : "false",
+                      "class" : "android.widget.FrameLayout",
+                      "important-for-accessibility" : "false"
+                    },
+                    "children" : [ {
+                      "attributes" : {
+                        "ignoreBoundsFiltering" : "false",
+                        "clickable" : "false",
+                        "bounds" : "[0,132][1080,2337]",
+                        "enabled" : "true",
+                        "focused" : "false",
+                        "checked" : "false",
+                        "scrollable" : "false",
+                        "selected" : "false",
+                        "class" : "android.widget.FrameLayout",
+                        "important-for-accessibility" : "false"
+                      },
+                      "children" : [ {
+                        "attributes" : {
+                          "ignoreBoundsFiltering" : "false",
+                          "clickable" : "false",
+                          "bounds" : "[0,132][1080,2337]",
+                          "enabled" : "true",
+                          "focused" : "false",
+                          "checked" : "false",
+                          "scrollable" : "false",
+                          "selected" : "false",
+                          "class" : "android.widget.FrameLayout",
+                          "important-for-accessibility" : "false"
+                        },
+                        "children" : [ {
+                          "attributes" : {
+                            "ignoreBoundsFiltering" : "false",
+                            "clickable" : "false",
+                            "bounds" : "[0,132][1080,2337]",
+                            "enabled" : "true",
+                            "focused" : "false",
+                            "checked" : "false",
+                            "scrollable" : "false",
+                            "selected" : "false",
+                            "class" : "android.widget.FrameLayout",
+                            "important-for-accessibility" : "false"
+                          },
+                          "children" : [ {
+                            "attributes" : {
+                              "ignoreBoundsFiltering" : "false",
+                              "clickable" : "false",
+                              "bounds" : "[0,132][1080,2337]",
+                              "enabled" : "true",
+                              "focused" : "false",
+                              "checked" : "false",
+                              "scrollable" : "false",
+                              "selected" : "false",
+                              "class" : "android.view.ViewGroup",
+                              "important-for-accessibility" : "false"
+                            },
+                            "children" : [ {
+                              "attributes" : {
+                                "ignoreBoundsFiltering" : "false",
+                                "clickable" : "false",
+                                "bounds" : "[0,132][1080,2337]",
+                                "enabled" : "true",
+                                "focused" : "false",
+                                "checked" : "false",
+                                "scrollable" : "false",
+                                "selected" : "false",
+                                "class" : "android.view.ViewGroup",
+                                "important-for-accessibility" : "false"
+                              },
+                              "clickable" : false,
+                              "enabled" : true,
+                              "focused" : false,
+                              "checked" : false,
+                              "selected" : false
+                            }, {
+                              "attributes" : {
+                                "ignoreBoundsFiltering" : "false",
+                                "clickable" : "false",
+                                "bounds" : "[0,132][1080,2337]",
+                                "enabled" : "true",
+                                "focused" : "false",
+                                "checked" : "false",
+                                "scrollable" : "false",
+                                "selected" : "false",
+                                "class" : "android.view.ViewGroup",
+                                "important-for-accessibility" : "false"
+                              },
+                              "children" : [ {
+                                "attributes" : {
+                                  "ignoreBoundsFiltering" : "false",
+                                  "clickable" : "false",
+                                  "bounds" : "[0,132][1080,2337]",
+                                  "enabled" : "true",
+                                  "focused" : "false",
+                                  "checked" : "false",
+                                  "scrollable" : "false",
+                                  "selected" : "false",
+                                  "class" : "android.view.ViewGroup",
+                                  "important-for-accessibility" : "false"
+                                },
+                                "children" : [ {
+                                  "attributes" : {
+                                    "ignoreBoundsFiltering" : "false",
+                                    "clickable" : "false",
+                                    "bounds" : "[0,132][1080,2337]",
+                                    "enabled" : "true",
+                                    "focused" : "false",
+                                    "checked" : "false",
+                                    "scrollable" : "false",
+                                    "selected" : "false",
+                                    "class" : "android.view.ViewGroup",
+                                    "important-for-accessibility" : "false"
+                                  },
+                                  "children" : [ {
+                                    "attributes" : {
+                                      "ignoreBoundsFiltering" : "false",
+                                      "clickable" : "false",
+                                      "bounds" : "[0,132][1080,2337]",
+                                      "enabled" : "true",
+                                      "focused" : "false",
+                                      "checked" : "false",
+                                      "scrollable" : "false",
+                                      "selected" : "false",
+                                      "class" : "android.view.ViewGroup",
+                                      "important-for-accessibility" : "false"
+                                    },
+                                    "children" : [ {
+                                      "attributes" : {
+                                        "ignoreBoundsFiltering" : "false",
+                                        "clickable" : "false",
+                                        "bounds" : "[0,132][1080,2337]",
+                                        "enabled" : "true",
+                                        "focused" : "false",
+                                        "checked" : "false",
+                                        "scrollable" : "false",
+                                        "selected" : "false",
+                                        "class" : "android.view.ViewGroup",
+                                        "important-for-accessibility" : "false"
+                                      },
+                                      "clickable" : false,
+                                      "enabled" : true,
+                                      "focused" : false,
+                                      "checked" : false,
+                                      "selected" : false
+                                    }, {
+                                      "attributes" : {
+                                        "ignoreBoundsFiltering" : "false",
+                                        "clickable" : "false",
+                                        "bounds" : "[0,132][1080,2337]",
+                                        "enabled" : "true",
+                                        "focused" : "false",
+                                        "checked" : "false",
+                                        "scrollable" : "false",
+                                        "selected" : "false",
+                                        "class" : "android.view.ViewGroup",
+                                        "important-for-accessibility" : "false"
+                                      },
+                                      "children" : [ {
+                                        "attributes" : {
+                                          "ignoreBoundsFiltering" : "false",
+                                          "clickable" : "false",
+                                          "bounds" : "[0,132][1080,2337]",
+                                          "enabled" : "true",
+                                          "focused" : "false",
+                                          "checked" : "false",
+                                          "scrollable" : "false",
+                                          "selected" : "false",
+                                          "class" : "android.view.ViewGroup",
+                                          "important-for-accessibility" : "false"
+                                        },
+                                        "children" : [ {
+                                          "attributes" : {
+                                            "ignoreBoundsFiltering" : "false",
+                                            "clickable" : "false",
+                                            "bounds" : "[0,132][1080,2337]",
+                                            "enabled" : "true",
+                                            "focused" : "false",
+                                            "checked" : "false",
+                                            "scrollable" : "false",
+                                            "selected" : "false",
+                                            "class" : "android.view.ViewGroup",
+                                            "important-for-accessibility" : "false"
+                                          },
+                                          "children" : [ {
+                                            "attributes" : {
+                                              "ignoreBoundsFiltering" : "false",
+                                              "clickable" : "false",
+                                              "bounds" : "[0,132][1080,2337]",
+                                              "enabled" : "true",
+                                              "focused" : "false",
+                                              "checked" : "false",
+                                              "scrollable" : "false",
+                                              "selected" : "false",
+                                              "class" : "android.view.ViewGroup",
+                                              "important-for-accessibility" : "false"
+                                            },
+                                            "children" : [ {
+                                              "attributes" : {
+                                                "ignoreBoundsFiltering" : "false",
+                                                "clickable" : "false",
+                                                "bounds" : "[0,132][1080,2337]",
+                                                "enabled" : "true",
+                                                "focused" : "false",
+                                                "checked" : "false",
+                                                "scrollable" : "false",
+                                                "selected" : "false",
+                                                "class" : "android.view.ViewGroup",
+                                                "important-for-accessibility" : "false"
+                                              },
+                                              "children" : [ {
+                                                "attributes" : {
+                                                  "ignoreBoundsFiltering" : "false",
+                                                  "clickable" : "false",
+                                                  "bounds" : "[0,132][1080,2337]",
+                                                  "enabled" : "true",
+                                                  "focused" : "false",
+                                                  "checked" : "false",
+                                                  "scrollable" : "false",
+                                                  "selected" : "false",
+                                                  "class" : "android.view.ViewGroup",
+                                                  "important-for-accessibility" : "false"
+                                                },
+                                                "children" : [ {
+                                                  "attributes" : {
+                                                    "ignoreBoundsFiltering" : "false",
+                                                    "clickable" : "false",
+                                                    "bounds" : "[0,132][1080,2337]",
+                                                    "enabled" : "true",
+                                                    "focused" : "false",
+                                                    "checked" : "false",
+                                                    "scrollable" : "false",
+                                                    "selected" : "false",
+                                                    "class" : "android.view.ViewGroup",
+                                                    "important-for-accessibility" : "false"
+                                                  },
+                                                  "clickable" : false,
+                                                  "enabled" : true,
+                                                  "focused" : false,
+                                                  "checked" : false,
+                                                  "selected" : false
+                                                }, {
+                                                  "attributes" : {
+                                                    "ignoreBoundsFiltering" : "false",
+                                                    "clickable" : "false",
+                                                    "bounds" : "[0,132][1080,2337]",
+                                                    "enabled" : "true",
+                                                    "focused" : "false",
+                                                    "checked" : "false",
+                                                    "scrollable" : "false",
+                                                    "selected" : "false",
+                                                    "class" : "android.view.ViewGroup",
+                                                    "important-for-accessibility" : "false"
+                                                  },
+                                                  "children" : [ {
+                                                    "attributes" : {
+                                                      "ignoreBoundsFiltering" : "false",
+                                                      "clickable" : "false",
+                                                      "bounds" : "[0,132][1080,2337]",
+                                                      "enabled" : "true",
+                                                      "focused" : "false",
+                                                      "checked" : "false",
+                                                      "scrollable" : "false",
+                                                      "selected" : "false",
+                                                      "class" : "android.view.ViewGroup",
+                                                      "important-for-accessibility" : "false"
+                                                    },
+                                                    "children" : [ {
+                                                      "attributes" : {
+                                                        "ignoreBoundsFiltering" : "false",
+                                                        "clickable" : "false",
+                                                        "bounds" : "[0,132][1080,2337]",
+                                                        "enabled" : "true",
+                                                        "focused" : "false",
+                                                        "checked" : "false",
+                                                        "scrollable" : "false",
+                                                        "selected" : "false",
+                                                        "class" : "android.view.ViewGroup",
+                                                        "important-for-accessibility" : "false"
+                                                      },
+                                                      "children" : [ {
+                                                        "attributes" : {
+                                                          "ignoreBoundsFiltering" : "false",
+                                                          "resource-id" : "bottom-navigation",
+                                                          "clickable" : "false",
+                                                          "bounds" : "[0,132][1080,2337]",
+                                                          "enabled" : "true",
+                                                          "focused" : "false",
+                                                          "checked" : "false",
+                                                          "scrollable" : "false",
+                                                          "selected" : "false",
+                                                          "class" : "android.view.ViewGroup",
+                                                          "important-for-accessibility" : "true"
+                                                        },
+                                                        "children" : [ {
+                                                          "attributes" : {
+                                                            "ignoreBoundsFiltering" : "false",
+                                                            "clickable" : "false",
+                                                            "bounds" : "[0,132][1080,2126]",
+                                                            "enabled" : "true",
+                                                            "focused" : "false",
+                                                            "checked" : "false",
+                                                            "scrollable" : "false",
+                                                            "selected" : "false",
+                                                            "class" : "android.view.ViewGroup",
+                                                            "important-for-accessibility" : "false"
+                                                          },
+                                                          "clickable" : false,
+                                                          "enabled" : true,
+                                                          "focused" : false,
+                                                          "checked" : false,
+                                                          "selected" : false
+                                                        }, {
+                                                          "attributes" : {
+                                                            "ignoreBoundsFiltering" : "false",
+                                                            "resource-id" : "RouteScreen: 0",
+                                                            "clickable" : "false",
+                                                            "bounds" : "[0,132][1080,2126]",
+                                                            "enabled" : "true",
+                                                            "focused" : "false",
+                                                            "checked" : "false",
+                                                            "scrollable" : "false",
+                                                            "selected" : "false",
+                                                            "class" : "android.view.ViewGroup",
+                                                            "important-for-accessibility" : "true"
+                                                          },
+                                                          "children" : [ {
+                                                            "attributes" : {
+                                                              "ignoreBoundsFiltering" : "false",
+                                                              "clickable" : "false",
+                                                              "bounds" : "[0,132][1080,2126]",
+                                                              "enabled" : "true",
+                                                              "focused" : "false",
+                                                              "checked" : "false",
+                                                              "scrollable" : "false",
+                                                              "selected" : "false",
+                                                              "class" : "android.view.ViewGroup",
+                                                              "important-for-accessibility" : "false"
+                                                            },
+                                                            "children" : [ {
+                                                              "attributes" : {
+                                                                "ignoreBoundsFiltering" : "false",
+                                                                "clickable" : "false",
+                                                                "bounds" : "[0,132][1080,2126]",
+                                                                "enabled" : "true",
+                                                                "focused" : "false",
+                                                                "checked" : "false",
+                                                                "scrollable" : "false",
+                                                                "selected" : "false",
+                                                                "class" : "android.view.ViewGroup",
+                                                                "important-for-accessibility" : "false"
+                                                              },
+                                                              "children" : [ {
+                                                                "attributes" : {
+                                                                  "ignoreBoundsFiltering" : "false",
+                                                                  "clickable" : "false",
+                                                                  "bounds" : "[0,132][1080,2126]",
+                                                                  "enabled" : "true",
+                                                                  "focused" : "false",
+                                                                  "checked" : "false",
+                                                                  "scrollable" : "false",
+                                                                  "selected" : "false",
+                                                                  "class" : "android.view.ViewGroup",
+                                                                  "important-for-accessibility" : "false"
+                                                                },
+                                                                "children" : [ {
+                                                                  "attributes" : {
+                                                                    "ignoreBoundsFiltering" : "false",
+                                                                    "clickable" : "false",
+                                                                    "bounds" : "[0,132][1080,2126]",
+                                                                    "enabled" : "true",
+                                                                    "focused" : "false",
+                                                                    "checked" : "false",
+                                                                    "scrollable" : "false",
+                                                                    "selected" : "false",
+                                                                    "class" : "android.view.ViewGroup",
+                                                                    "important-for-accessibility" : "false"
+                                                                  },
+                                                                  "children" : [ {
+                                                                    "attributes" : {
+                                                                      "ignoreBoundsFiltering" : "false",
+                                                                      "clickable" : "false",
+                                                                      "bounds" : "[0,132][1080,2126]",
+                                                                      "enabled" : "true",
+                                                                      "focused" : "false",
+                                                                      "checked" : "false",
+                                                                      "scrollable" : "false",
+                                                                      "selected" : "false",
+                                                                      "class" : "android.view.ViewGroup",
+                                                                      "important-for-accessibility" : "false"
+                                                                    },
+                                                                    "children" : [ {
+                                                                      "attributes" : {
+                                                                        "ignoreBoundsFiltering" : "false",
+                                                                        "clickable" : "false",
+                                                                        "bounds" : "[0,132][1080,2126]",
+                                                                        "enabled" : "true",
+                                                                        "focused" : "false",
+                                                                        "checked" : "false",
+                                                                        "scrollable" : "false",
+                                                                        "selected" : "false",
+                                                                        "class" : "android.view.ViewGroup",
+                                                                        "important-for-accessibility" : "false"
+                                                                      },
+                                                                      "children" : [ {
+                                                                        "attributes" : {
+                                                                          "ignoreBoundsFiltering" : "false",
+                                                                          "clickable" : "false",
+                                                                          "bounds" : "[0,132][1080,2126]",
+                                                                          "enabled" : "true",
+                                                                          "focused" : "false",
+                                                                          "checked" : "false",
+                                                                          "scrollable" : "false",
+                                                                          "selected" : "false",
+                                                                          "class" : "android.view.ViewGroup",
+                                                                          "important-for-accessibility" : "false"
+                                                                        },
+                                                                        "children" : [ {
+                                                                          "attributes" : {
+                                                                            "ignoreBoundsFiltering" : "false",
+                                                                            "clickable" : "false",
+                                                                            "bounds" : "[0,132][1080,314]",
+                                                                            "enabled" : "true",
+                                                                            "focused" : "false",
+                                                                            "checked" : "false",
+                                                                            "scrollable" : "false",
+                                                                            "selected" : "false",
+                                                                            "class" : "android.view.ViewGroup",
+                                                                            "important-for-accessibility" : "false"
+                                                                          },
+                                                                          "clickable" : false,
+                                                                          "enabled" : true,
+                                                                          "focused" : false,
+                                                                          "checked" : false,
+                                                                          "selected" : false
+                                                                        }, {
+                                                                          "attributes" : {
+                                                                            "ignoreBoundsFiltering" : "false",
+                                                                            "clickable" : "false",
+                                                                            "bounds" : "[42,181][126,265]",
+                                                                            "enabled" : "true",
+                                                                            "focused" : "false",
+                                                                            "checked" : "false",
+                                                                            "scrollable" : "false",
+                                                                            "selected" : "false",
+                                                                            "class" : "android.view.ViewGroup",
+                                                                            "important-for-accessibility" : "false"
+                                                                          },
+                                                                          "children" : [ {
+                                                                            "attributes" : {
+                                                                              "ignoreBoundsFiltering" : "false",
+                                                                              "clickable" : "false",
+                                                                              "bounds" : "[64,200][104,245]",
+                                                                              "enabled" : "true",
+                                                                              "focused" : "false",
+                                                                              "checked" : "false",
+                                                                              "scrollable" : "false",
+                                                                              "selected" : "false",
+                                                                              "class" : "android.widget.ImageView",
+                                                                              "important-for-accessibility" : "true"
+                                                                            },
+                                                                            "clickable" : false,
+                                                                            "enabled" : true,
+                                                                            "focused" : false,
+                                                                            "checked" : false,
+                                                                            "selected" : false
+                                                                          } ],
+                                                                          "clickable" : false,
+                                                                          "enabled" : true,
+                                                                          "focused" : false,
+                                                                          "checked" : false,
+                                                                          "selected" : false
+                                                                        }, {
+                                                                          "attributes" : {
+                                                                            "text" : "Expo Go",
+                                                                            "ignoreBoundsFiltering" : "false",
+                                                                            "clickable" : "false",
+                                                                            "bounds" : "[147,199][303,247]",
+                                                                            "enabled" : "true",
+                                                                            "focused" : "false",
+                                                                            "checked" : "false",
+                                                                            "scrollable" : "false",
+                                                                            "selected" : "false",
+                                                                            "class" : "android.widget.TextView",
+                                                                            "important-for-accessibility" : "true"
+                                                                          },
+                                                                          "clickable" : false,
+                                                                          "enabled" : true,
+                                                                          "focused" : false,
+                                                                          "checked" : false,
+                                                                          "selected" : false
+                                                                        }, {
+                                                                          "attributes" : {
+                                                                            "ignoreBoundsFiltering" : "false",
+                                                                            "clickable" : "true",
+                                                                            "bounds" : "[903,174][1038,271]",
+                                                                            "enabled" : "true",
+                                                                            "focused" : "false",
+                                                                            "checked" : "false",
+                                                                            "scrollable" : "false",
+                                                                            "selected" : "false",
+                                                                            "class" : "android.view.ViewGroup",
+                                                                            "important-for-accessibility" : "true"
+                                                                          },
+                                                                          "children" : [ {
+                                                                            "attributes" : {
+                                                                              "ignoreBoundsFiltering" : "false",
+                                                                              "clickable" : "false",
+                                                                              "bounds" : "[903,174][1038,271]",
+                                                                              "enabled" : "true",
+                                                                              "focused" : "false",
+                                                                              "checked" : "false",
+                                                                              "scrollable" : "false",
+                                                                              "selected" : "false",
+                                                                              "class" : "android.view.ViewGroup",
+                                                                              "important-for-accessibility" : "true"
+                                                                            },
+                                                                            "children" : [ {
+                                                                              "attributes" : {
+                                                                                "text" : "Log In",
+                                                                                "ignoreBoundsFiltering" : "false",
+                                                                                "clickable" : "false",
+                                                                                "bounds" : "[926,197][1014,247]",
+                                                                                "enabled" : "true",
+                                                                                "focused" : "false",
+                                                                                "checked" : "false",
+                                                                                "scrollable" : "false",
+                                                                                "selected" : "false",
+                                                                                "class" : "android.widget.TextView",
+                                                                                "important-for-accessibility" : "true"
+                                                                              },
+                                                                              "clickable" : false,
+                                                                              "enabled" : true,
+                                                                              "focused" : false,
+                                                                              "checked" : false,
+                                                                              "selected" : false
+                                                                            } ],
+                                                                            "clickable" : false,
+                                                                            "enabled" : true,
+                                                                            "focused" : false,
+                                                                            "checked" : false,
+                                                                            "selected" : false
+                                                                          } ],
+                                                                          "clickable" : true,
+                                                                          "enabled" : true,
+                                                                          "focused" : false,
+                                                                          "checked" : false,
+                                                                          "selected" : false
+                                                                        }, {
+                                                                          "attributes" : {
+                                                                            "ignoreBoundsFiltering" : "false",
+                                                                            "clickable" : "false",
+                                                                            "bounds" : "[0,314][1080,2126]",
+                                                                            "enabled" : "true",
+                                                                            "focused" : "false",
+                                                                            "checked" : "false",
+                                                                            "scrollable" : "false",
+                                                                            "selected" : "false",
+                                                                            "class" : "android.view.ViewGroup",
+                                                                            "important-for-accessibility" : "false"
+                                                                          },
+                                                                          "children" : [ {
+                                                                            "attributes" : {
+                                                                              "ignoreBoundsFiltering" : "false",
+                                                                              "clickable" : "false",
+                                                                              "bounds" : "[0,314][1080,2126]",
+                                                                              "enabled" : "true",
+                                                                              "focused" : "false",
+                                                                              "checked" : "false",
+                                                                              "scrollable" : "true",
+                                                                              "selected" : "false",
+                                                                              "class" : "android.widget.ScrollView",
+                                                                              "important-for-accessibility" : "true"
+                                                                            },
+                                                                            "children" : [ {
+                                                                              "attributes" : {
+                                                                                "ignoreBoundsFiltering" : "false",
+                                                                                "clickable" : "false",
+                                                                                "bounds" : "[0,314][1080,900]",
+                                                                                "enabled" : "true",
+                                                                                "focused" : "false",
+                                                                                "checked" : "false",
+                                                                                "scrollable" : "false",
+                                                                                "selected" : "false",
+                                                                                "class" : "android.view.ViewGroup",
+                                                                                "important-for-accessibility" : "false"
+                                                                              },
+                                                                              "children" : [ {
+                                                                                "attributes" : {
+                                                                                  "ignoreBoundsFiltering" : "false",
+                                                                                  "clickable" : "false",
+                                                                                  "bounds" : "[74,395][116,437]",
+                                                                                  "enabled" : "true",
+                                                                                  "focused" : "false",
+                                                                                  "checked" : "false",
+                                                                                  "scrollable" : "false",
+                                                                                  "selected" : "false",
+                                                                                  "class" : "android.widget.ImageView",
+                                                                                  "important-for-accessibility" : "true"
+                                                                                },
+                                                                                "clickable" : false,
+                                                                                "enabled" : true,
+                                                                                "focused" : false,
+                                                                                "checked" : false,
+                                                                                "selected" : false
+                                                                              }, {
+                                                                                "attributes" : {
+                                                                                  "text" : "Development servers",
+                                                                                  "ignoreBoundsFiltering" : "false",
+                                                                                  "clickable" : "false",
+                                                                                  "bounds" : "[137,388][466,444]",
+                                                                                  "enabled" : "true",
+                                                                                  "focused" : "false",
+                                                                                  "checked" : "false",
+                                                                                  "scrollable" : "false",
+                                                                                  "selected" : "false",
+                                                                                  "class" : "android.view.View",
+                                                                                  "important-for-accessibility" : "true"
+                                                                                },
+                                                                                "clickable" : false,
+                                                                                "enabled" : true,
+                                                                                "focused" : false,
+                                                                                "checked" : false,
+                                                                                "selected" : false
+                                                                              }, {
+                                                                                "attributes" : {
+                                                                                  "ignoreBoundsFiltering" : "false",
+                                                                                  "clickable" : "true",
+                                                                                  "bounds" : "[926,391][1007,441]",
+                                                                                  "enabled" : "true",
+                                                                                  "focused" : "false",
+                                                                                  "checked" : "false",
+                                                                                  "scrollable" : "false",
+                                                                                  "selected" : "false",
+                                                                                  "class" : "android.view.ViewGroup",
+                                                                                  "important-for-accessibility" : "true"
+                                                                                },
+                                                                                "children" : [ {
+                                                                                  "attributes" : {
+                                                                                    "ignoreBoundsFiltering" : "false",
+                                                                                    "clickable" : "false",
+                                                                                    "bounds" : "[926,391][1007,441]",
+                                                                                    "enabled" : "true",
+                                                                                    "focused" : "false",
+                                                                                    "checked" : "false",
+                                                                                    "scrollable" : "false",
+                                                                                    "selected" : "false",
+                                                                                    "class" : "android.view.ViewGroup",
+                                                                                    "important-for-accessibility" : "true"
+                                                                                  },
+                                                                                  "children" : [ {
+                                                                                    "attributes" : {
+                                                                                      "text" : "HELP",
+                                                                                      "ignoreBoundsFiltering" : "false",
+                                                                                      "clickable" : "false",
+                                                                                      "bounds" : "[926,391][1007,441]",
+                                                                                      "enabled" : "true",
+                                                                                      "focused" : "false",
+                                                                                      "checked" : "false",
+                                                                                      "scrollable" : "false",
+                                                                                      "selected" : "false",
+                                                                                      "class" : "android.widget.TextView",
+                                                                                      "important-for-accessibility" : "true"
+                                                                                    },
+                                                                                    "clickable" : false,
+                                                                                    "enabled" : true,
+                                                                                    "focused" : false,
+                                                                                    "checked" : false,
+                                                                                    "selected" : false
+                                                                                  } ],
+                                                                                  "clickable" : false,
+                                                                                  "enabled" : true,
+                                                                                  "focused" : false,
+                                                                                  "checked" : false,
+                                                                                  "selected" : false
+                                                                                } ],
+                                                                                "clickable" : true,
+                                                                                "enabled" : true,
+                                                                                "focused" : false,
+                                                                                "checked" : false,
+                                                                                "selected" : false
+                                                                              }, {
+                                                                                "attributes" : {
+                                                                                  "ignoreBoundsFiltering" : "false",
+                                                                                  "clickable" : "true",
+                                                                                  "bounds" : "[42,475][1038,858]",
+                                                                                  "enabled" : "true",
+                                                                                  "focused" : "false",
+                                                                                  "checked" : "false",
+                                                                                  "scrollable" : "false",
+                                                                                  "selected" : "false",
+                                                                                  "class" : "android.view.ViewGroup",
+                                                                                  "important-for-accessibility" : "true"
+                                                                                },
+                                                                                "children" : [ {
+                                                                                  "attributes" : {
+                                                                                    "ignoreBoundsFiltering" : "false",
+                                                                                    "clickable" : "false",
+                                                                                    "bounds" : "[42,475][1038,858]",
+                                                                                    "enabled" : "true",
+                                                                                    "focused" : "false",
+                                                                                    "checked" : "false",
+                                                                                    "scrollable" : "false",
+                                                                                    "selected" : "false",
+                                                                                    "class" : "android.view.ViewGroup",
+                                                                                    "important-for-accessibility" : "true"
+                                                                                  },
+                                                                                  "children" : [ {
+                                                                                    "attributes" : {
+                                                                                      "ignoreBoundsFiltering" : "false",
+                                                                                      "clickable" : "false",
+                                                                                      "bounds" : "[42,475][1038,858]",
+                                                                                      "enabled" : "true",
+                                                                                      "focused" : "false",
+                                                                                      "checked" : "false",
+                                                                                      "scrollable" : "false",
+                                                                                      "selected" : "false",
+                                                                                      "class" : "android.view.ViewGroup",
+                                                                                      "important-for-accessibility" : "false"
+                                                                                    },
+                                                                                    "clickable" : false,
+                                                                                    "enabled" : true,
+                                                                                    "focused" : false,
+                                                                                    "checked" : false,
+                                                                                    "selected" : false
+                                                                                  }, {
+                                                                                    "attributes" : {
+                                                                                      "text" : "Press here to sign in to your Expo account and see the projects you have recently been working on.",
+                                                                                      "ignoreBoundsFiltering" : "false",
+                                                                                      "clickable" : "false",
+                                                                                      "bounds" : "[87,520][995,679]",
+                                                                                      "enabled" : "true",
+                                                                                      "focused" : "false",
+                                                                                      "checked" : "false",
+                                                                                      "scrollable" : "false",
+                                                                                      "selected" : "false",
+                                                                                      "class" : "android.widget.TextView",
+                                                                                      "important-for-accessibility" : "true"
+                                                                                    },
+                                                                                    "clickable" : false,
+                                                                                    "enabled" : true,
+                                                                                    "focused" : false,
+                                                                                    "checked" : false,
+                                                                                    "selected" : false
+                                                                                  }, {
+                                                                                    "attributes" : {
+                                                                                      "ignoreBoundsFiltering" : "false",
+                                                                                      "clickable" : "false",
+                                                                                      "bounds" : "[45,721][1035,724]",
+                                                                                      "enabled" : "true",
+                                                                                      "focused" : "false",
+                                                                                      "checked" : "false",
+                                                                                      "scrollable" : "false",
+                                                                                      "selected" : "false",
+                                                                                      "class" : "android.view.ViewGroup",
+                                                                                      "important-for-accessibility" : "false"
+                                                                                    },
+                                                                                    "clickable" : false,
+                                                                                    "enabled" : true,
+                                                                                    "focused" : false,
+                                                                                    "checked" : false,
+                                                                                    "selected" : false
+                                                                                  }, {
+                                                                                    "attributes" : {
+                                                                                      "ignoreBoundsFiltering" : "false",
+                                                                                      "clickable" : "true",
+                                                                                      "bounds" : "[45,723][1035,855]",
+                                                                                      "enabled" : "true",
+                                                                                      "focused" : "false",
+                                                                                      "checked" : "false",
+                                                                                      "scrollable" : "false",
+                                                                                      "selected" : "false",
+                                                                                      "class" : "android.view.ViewGroup",
+                                                                                      "important-for-accessibility" : "true"
+                                                                                    },
+                                                                                    "children" : [ {
+                                                                                      "attributes" : {
+                                                                                        "ignoreBoundsFiltering" : "false",
+                                                                                        "clickable" : "false",
+                                                                                        "bounds" : "[45,723][1035,855]",
+                                                                                        "enabled" : "true",
+                                                                                        "focused" : "false",
+                                                                                        "checked" : "false",
+                                                                                        "scrollable" : "false",
+                                                                                        "selected" : "false",
+                                                                                        "class" : "android.view.ViewGroup",
+                                                                                        "important-for-accessibility" : "true"
+                                                                                      },
+                                                                                      "children" : [ {
+                                                                                        "attributes" : {
+                                                                                          "ignoreBoundsFiltering" : "false",
+                                                                                          "clickable" : "false",
+                                                                                          "bounds" : "[87,768][129,810]",
+                                                                                          "enabled" : "true",
+                                                                                          "focused" : "false",
+                                                                                          "checked" : "false",
+                                                                                          "scrollable" : "false",
+                                                                                          "selected" : "false",
+                                                                                          "class" : "android.view.ViewGroup",
+                                                                                          "important-for-accessibility" : "false"
+                                                                                        },
+                                                                                        "children" : [ {
+                                                                                          "attributes" : {
+                                                                                            "ignoreBoundsFiltering" : "false",
+                                                                                            "clickable" : "false",
+                                                                                            "bounds" : "[87,768][129,810]",
+                                                                                            "enabled" : "true",
+                                                                                            "focused" : "false",
+                                                                                            "checked" : "false",
+                                                                                            "scrollable" : "false",
+                                                                                            "selected" : "false",
+                                                                                            "class" : "android.widget.ImageView",
+                                                                                            "important-for-accessibility" : "true"
+                                                                                          },
+                                                                                          "clickable" : false,
+                                                                                          "enabled" : true,
+                                                                                          "focused" : false,
+                                                                                          "checked" : false,
+                                                                                          "selected" : false
+                                                                                        } ],
+                                                                                        "clickable" : false,
+                                                                                        "enabled" : true,
+                                                                                        "focused" : false,
+                                                                                        "checked" : false,
+                                                                                        "selected" : false
+                                                                                      }, {
+                                                                                        "attributes" : {
+                                                                                          "text" : "Enter URL manually",
+                                                                                          "ignoreBoundsFiltering" : "false",
+                                                                                          "clickable" : "false",
+                                                                                          "bounds" : "[150,765][512,813]",
+                                                                                          "enabled" : "true",
+                                                                                          "focused" : "false",
+                                                                                          "checked" : "false",
+                                                                                          "scrollable" : "false",
+                                                                                          "selected" : "false",
+                                                                                          "class" : "android.widget.TextView",
+                                                                                          "important-for-accessibility" : "true"
+                                                                                        },
+                                                                                        "clickable" : false,
+                                                                                        "enabled" : true,
+                                                                                        "focused" : false,
+                                                                                        "checked" : false,
+                                                                                        "selected" : false
+                                                                                      } ],
+                                                                                      "clickable" : false,
+                                                                                      "enabled" : true,
+                                                                                      "focused" : false,
+                                                                                      "checked" : false,
+                                                                                      "selected" : false
+                                                                                    } ],
+                                                                                    "clickable" : true,
+                                                                                    "enabled" : true,
+                                                                                    "focused" : false,
+                                                                                    "checked" : false,
+                                                                                    "selected" : false
+                                                                                  } ],
+                                                                                  "clickable" : false,
+                                                                                  "enabled" : true,
+                                                                                  "focused" : false,
+                                                                                  "checked" : false,
+                                                                                  "selected" : false
+                                                                                } ],
+                                                                                "clickable" : true,
+                                                                                "enabled" : true,
+                                                                                "focused" : false,
+                                                                                "checked" : false,
+                                                                                "selected" : false
+                                                                              } ],
+                                                                              "clickable" : false,
+                                                                              "enabled" : true,
+                                                                              "focused" : false,
+                                                                              "checked" : false,
+                                                                              "selected" : false
+                                                                            } ],
+                                                                            "clickable" : false,
+                                                                            "enabled" : true,
+                                                                            "focused" : false,
+                                                                            "checked" : false,
+                                                                            "selected" : false
+                                                                          } ],
+                                                                          "clickable" : false,
+                                                                          "enabled" : true,
+                                                                          "focused" : false,
+                                                                          "checked" : false,
+                                                                          "selected" : false
+                                                                        } ],
+                                                                        "clickable" : false,
+                                                                        "enabled" : true,
+                                                                        "focused" : false,
+                                                                        "checked" : false,
+                                                                        "selected" : false
+                                                                      } ],
+                                                                      "clickable" : false,
+                                                                      "enabled" : true,
+                                                                      "focused" : false,
+                                                                      "checked" : false,
+                                                                      "selected" : false
+                                                                    } ],
+                                                                    "clickable" : false,
+                                                                    "enabled" : true,
+                                                                    "focused" : false,
+                                                                    "checked" : false,
+                                                                    "selected" : false
+                                                                  } ],
+                                                                  "clickable" : false,
+                                                                  "enabled" : true,
+                                                                  "focused" : false,
+                                                                  "checked" : false,
+                                                                  "selected" : false
+                                                                } ],
+                                                                "clickable" : false,
+                                                                "enabled" : true,
+                                                                "focused" : false,
+                                                                "checked" : false,
+                                                                "selected" : false
+                                                              }, {
+                                                                "attributes" : {
+                                                                  "ignoreBoundsFiltering" : "false",
+                                                                  "clickable" : "false",
+                                                                  "bounds" : "[0,132][1080,300]",
+                                                                  "enabled" : "true",
+                                                                  "focused" : "false",
+                                                                  "checked" : "false",
+                                                                  "scrollable" : "false",
+                                                                  "selected" : "false",
+                                                                  "class" : "android.view.ViewGroup",
+                                                                  "important-for-accessibility" : "false"
+                                                                },
+                                                                "clickable" : false,
+                                                                "enabled" : true,
+                                                                "focused" : false,
+                                                                "checked" : false,
+                                                                "selected" : false
+                                                              } ],
+                                                              "clickable" : false,
+                                                              "enabled" : true,
+                                                              "focused" : false,
+                                                              "checked" : false,
+                                                              "selected" : false
+                                                            } ],
+                                                            "clickable" : false,
+                                                            "enabled" : true,
+                                                            "focused" : false,
+                                                            "checked" : false,
+                                                            "selected" : false
+                                                          } ],
+                                                          "clickable" : false,
+                                                          "enabled" : true,
+                                                          "focused" : false,
+                                                          "checked" : false,
+                                                          "selected" : false
+                                                        }, {
+                                                          "attributes" : {
+                                                            "ignoreBoundsFiltering" : "false",
+                                                            "resource-id" : "bottom-navigation-bar",
+                                                            "clickable" : "false",
+                                                            "bounds" : "[0,2126][1080,2337]",
+                                                            "enabled" : "true",
+                                                            "focused" : "false",
+                                                            "checked" : "false",
+                                                            "scrollable" : "false",
+                                                            "selected" : "false",
+                                                            "class" : "android.view.ViewGroup",
+                                                            "important-for-accessibility" : "true"
+                                                          },
+                                                          "children" : [ {
+                                                            "attributes" : {
+                                                              "ignoreBoundsFiltering" : "false",
+                                                              "resource-id" : "bottom-navigation-bar-content",
+                                                              "clickable" : "false",
+                                                              "bounds" : "[0,2127][1080,2337]",
+                                                              "enabled" : "true",
+                                                              "focused" : "false",
+                                                              "checked" : "false",
+                                                              "scrollable" : "false",
+                                                              "selected" : "false",
+                                                              "class" : "android.view.ViewGroup",
+                                                              "important-for-accessibility" : "true"
+                                                            },
+                                                            "children" : [ {
+                                                              "attributes" : {
+                                                                "ignoreBoundsFiltering" : "false",
+                                                                "resource-id" : "bottom-navigation-bar-content-wrapper",
+                                                                "clickable" : "false",
+                                                                "bounds" : "[0,2127][1080,2337]",
+                                                                "enabled" : "true",
+                                                                "focused" : "false",
+                                                                "checked" : "false",
+                                                                "scrollable" : "false",
+                                                                "selected" : "false",
+                                                                "class" : "android.view.View",
+                                                                "important-for-accessibility" : "true"
+                                                              },
+                                                              "clickable" : false,
+                                                              "enabled" : true,
+                                                              "focused" : false,
+                                                              "checked" : false,
+                                                              "selected" : false
+                                                            }, {
+                                                              "attributes" : {
+                                                                "accessibilityText" : "Home",
+                                                                "ignoreBoundsFiltering" : "false",
+                                                                "clickable" : "true",
+                                                                "bounds" : "[0,2127][540,2337]",
+                                                                "enabled" : "true",
+                                                                "focused" : "false",
+                                                                "checked" : "false",
+                                                                "scrollable" : "false",
+                                                                "selected" : "true",
+                                                                "class" : "android.view.View",
+                                                                "important-for-accessibility" : "true"
+                                                              },
+                                                              "children" : [ {
+                                                                "attributes" : {
+                                                                  "ignoreBoundsFiltering" : "false",
+                                                                  "clickable" : "false",
+                                                                  "bounds" : "[0,2127][540,2337]",
+                                                                  "enabled" : "true",
+                                                                  "focused" : "false",
+                                                                  "checked" : "false",
+                                                                  "scrollable" : "false",
+                                                                  "selected" : "false",
+                                                                  "class" : "android.view.ViewGroup",
+                                                                  "important-for-accessibility" : "false"
+                                                                },
+                                                                "children" : [ {
+                                                                  "attributes" : {
+                                                                    "ignoreBoundsFiltering" : "false",
+                                                                    "clickable" : "false",
+                                                                    "bounds" : "[228,2159][312,2243]",
+                                                                    "enabled" : "true",
+                                                                    "focused" : "false",
+                                                                    "checked" : "false",
+                                                                    "scrollable" : "false",
+                                                                    "selected" : "false",
+                                                                    "class" : "android.view.ViewGroup",
+                                                                    "important-for-accessibility" : "false"
+                                                                  },
+                                                                  "children" : [ {
+                                                                    "attributes" : {
+                                                                      "ignoreBoundsFiltering" : "false",
+                                                                      "clickable" : "false",
+                                                                      "bounds" : "[228,2159][312,2243]",
+                                                                      "enabled" : "true",
+                                                                      "focused" : "false",
+                                                                      "checked" : "false",
+                                                                      "scrollable" : "false",
+                                                                      "selected" : "false",
+                                                                      "class" : "android.view.ViewGroup",
+                                                                      "important-for-accessibility" : "false"
+                                                                    },
+                                                                    "clickable" : false,
+                                                                    "enabled" : true,
+                                                                    "focused" : false,
+                                                                    "checked" : false,
+                                                                    "selected" : false
+                                                                  }, {
+                                                                    "attributes" : {
+                                                                      "ignoreBoundsFiltering" : "false",
+                                                                      "clickable" : "false",
+                                                                      "bounds" : "[228,2170][312,2243]",
+                                                                      "enabled" : "true",
+                                                                      "focused" : "false",
+                                                                      "checked" : "false",
+                                                                      "scrollable" : "false",
+                                                                      "selected" : "false",
+                                                                      "class" : "android.view.ViewGroup",
+                                                                      "important-for-accessibility" : "false"
+                                                                    },
+                                                                    "children" : [ {
+                                                                      "attributes" : {
+                                                                        "ignoreBoundsFiltering" : "false",
+                                                                        "clickable" : "false",
+                                                                        "bounds" : "[239,2170][302,2233]",
+                                                                        "enabled" : "true",
+                                                                        "focused" : "false",
+                                                                        "checked" : "false",
+                                                                        "scrollable" : "false",
+                                                                        "selected" : "false",
+                                                                        "class" : "com.horcrux.svg.SvgView",
+                                                                        "important-for-accessibility" : "false"
+                                                                      },
+                                                                      "children" : [ {
+                                                                        "attributes" : {
+                                                                          "ignoreBoundsFiltering" : "false",
+                                                                          "clickable" : "false",
+                                                                          "bounds" : "[242,2173][299,2230]",
+                                                                          "enabled" : "true",
+                                                                          "focused" : "false",
+                                                                          "checked" : "false",
+                                                                          "scrollable" : "false",
+                                                                          "selected" : "false",
+                                                                          "class" : "com.horcrux.svg.B",
+                                                                          "important-for-accessibility" : "false"
+                                                                        },
+                                                                        "children" : [ {
+                                                                          "attributes" : {
+                                                                            "ignoreBoundsFiltering" : "false",
+                                                                            "clickable" : "false",
+                                                                            "bounds" : "[242,2173][299,2230]",
+                                                                            "enabled" : "true",
+                                                                            "focused" : "false",
+                                                                            "checked" : "false",
+                                                                            "scrollable" : "false",
+                                                                            "selected" : "false",
+                                                                            "class" : "com.horcrux.svg.J",
+                                                                            "important-for-accessibility" : "false"
+                                                                          },
+                                                                          "clickable" : false,
+                                                                          "enabled" : true,
+                                                                          "focused" : false,
+                                                                          "checked" : false,
+                                                                          "selected" : false
+                                                                        } ],
+                                                                        "clickable" : false,
+                                                                        "enabled" : true,
+                                                                        "focused" : false,
+                                                                        "checked" : false,
+                                                                        "selected" : false
+                                                                      } ],
+                                                                      "clickable" : false,
+                                                                      "enabled" : true,
+                                                                      "focused" : false,
+                                                                      "checked" : false,
+                                                                      "selected" : false
+                                                                    } ],
+                                                                    "clickable" : false,
+                                                                    "enabled" : true,
+                                                                    "focused" : false,
+                                                                    "checked" : false,
+                                                                    "selected" : false
+                                                                  } ],
+                                                                  "clickable" : false,
+                                                                  "enabled" : true,
+                                                                  "focused" : false,
+                                                                  "checked" : false,
+                                                                  "selected" : false
+                                                                }, {
+                                                                  "attributes" : {
+                                                                    "ignoreBoundsFiltering" : "false",
+                                                                    "clickable" : "false",
+                                                                    "bounds" : "[0,2253][540,2295]",
+                                                                    "enabled" : "true",
+                                                                    "focused" : "false",
+                                                                    "checked" : "false",
+                                                                    "scrollable" : "false",
+                                                                    "selected" : "false",
+                                                                    "class" : "android.view.ViewGroup",
+                                                                    "important-for-accessibility" : "false"
+                                                                  },
+                                                                  "children" : [ {
+                                                                    "attributes" : {
+                                                                      "ignoreBoundsFiltering" : "false",
+                                                                      "clickable" : "false",
+                                                                      "bounds" : "[0,2253][540,2295]",
+                                                                      "enabled" : "true",
+                                                                      "focused" : "false",
+                                                                      "checked" : "false",
+                                                                      "scrollable" : "false",
+                                                                      "selected" : "false",
+                                                                      "class" : "android.view.ViewGroup",
+                                                                      "important-for-accessibility" : "false"
+                                                                    },
+                                                                    "children" : [ {
+                                                                      "attributes" : {
+                                                                        "text" : "Home",
+                                                                        "ignoreBoundsFiltering" : "false",
+                                                                        "clickable" : "false",
+                                                                        "bounds" : "[0,2253][540,2295]",
+                                                                        "enabled" : "true",
+                                                                        "focused" : "false",
+                                                                        "checked" : "false",
+                                                                        "scrollable" : "false",
+                                                                        "selected" : "false",
+                                                                        "class" : "android.widget.TextView",
+                                                                        "important-for-accessibility" : "true"
+                                                                      },
+                                                                      "clickable" : false,
+                                                                      "enabled" : true,
+                                                                      "focused" : false,
+                                                                      "checked" : false,
+                                                                      "selected" : false
+                                                                    } ],
+                                                                    "clickable" : false,
+                                                                    "enabled" : true,
+                                                                    "focused" : false,
+                                                                    "checked" : false,
+                                                                    "selected" : false
+                                                                  } ],
+                                                                  "clickable" : false,
+                                                                  "enabled" : true,
+                                                                  "focused" : false,
+                                                                  "checked" : false,
+                                                                  "selected" : false
+                                                                } ],
+                                                                "clickable" : false,
+                                                                "enabled" : true,
+                                                                "focused" : false,
+                                                                "checked" : false,
+                                                                "selected" : false
+                                                              } ],
+                                                              "clickable" : true,
+                                                              "enabled" : true,
+                                                              "focused" : false,
+                                                              "checked" : false,
+                                                              "selected" : true
+                                                            }, {
+                                                              "attributes" : {
+                                                                "ignoreBoundsFiltering" : "false",
+                                                                "clickable" : "true",
+                                                                "bounds" : "[540,2127][1080,2337]",
+                                                                "enabled" : "true",
+                                                                "focused" : "false",
+                                                                "checked" : "false",
+                                                                "scrollable" : "false",
+                                                                "selected" : "false",
+                                                                "class" : "android.view.View",
+                                                                "important-for-accessibility" : "true"
+                                                              },
+                                                              "children" : [ {
+                                                                "attributes" : {
+                                                                  "ignoreBoundsFiltering" : "false",
+                                                                  "clickable" : "false",
+                                                                  "bounds" : "[540,2127][1080,2337]",
+                                                                  "enabled" : "true",
+                                                                  "focused" : "false",
+                                                                  "checked" : "false",
+                                                                  "scrollable" : "false",
+                                                                  "selected" : "false",
+                                                                  "class" : "android.view.ViewGroup",
+                                                                  "important-for-accessibility" : "false"
+                                                                },
+                                                                "children" : [ {
+                                                                  "attributes" : {
+                                                                    "ignoreBoundsFiltering" : "false",
+                                                                    "clickable" : "false",
+                                                                    "bounds" : "[768,2177][852,2261]",
+                                                                    "enabled" : "true",
+                                                                    "focused" : "false",
+                                                                    "checked" : "false",
+                                                                    "scrollable" : "false",
+                                                                    "selected" : "false",
+                                                                    "class" : "android.view.ViewGroup",
+                                                                    "important-for-accessibility" : "false"
+                                                                  },
+                                                                  "children" : [ {
+                                                                    "attributes" : {
+                                                                      "ignoreBoundsFiltering" : "false",
+                                                                      "clickable" : "false",
+                                                                      "bounds" : "[768,2188][852,2261]",
+                                                                      "enabled" : "true",
+                                                                      "focused" : "false",
+                                                                      "checked" : "false",
+                                                                      "scrollable" : "false",
+                                                                      "selected" : "false",
+                                                                      "class" : "android.view.ViewGroup",
+                                                                      "important-for-accessibility" : "false"
+                                                                    },
+                                                                    "children" : [ {
+                                                                      "attributes" : {
+                                                                        "ignoreBoundsFiltering" : "false",
+                                                                        "clickable" : "false",
+                                                                        "bounds" : "[779,2188][842,2251]",
+                                                                        "enabled" : "true",
+                                                                        "focused" : "false",
+                                                                        "checked" : "false",
+                                                                        "scrollable" : "false",
+                                                                        "selected" : "false",
+                                                                        "class" : "com.horcrux.svg.SvgView",
+                                                                        "important-for-accessibility" : "false"
+                                                                      },
+                                                                      "children" : [ {
+                                                                        "attributes" : {
+                                                                          "ignoreBoundsFiltering" : "false",
+                                                                          "clickable" : "false",
+                                                                          "bounds" : "[779,2188][842,2251]",
+                                                                          "enabled" : "true",
+                                                                          "focused" : "false",
+                                                                          "checked" : "false",
+                                                                          "scrollable" : "false",
+                                                                          "selected" : "false",
+                                                                          "class" : "com.horcrux.svg.B",
+                                                                          "important-for-accessibility" : "false"
+                                                                        },
+                                                                        "children" : [ {
+                                                                          "attributes" : {
+                                                                            "ignoreBoundsFiltering" : "false",
+                                                                            "clickable" : "false",
+                                                                            "bounds" : "[779,2188][842,2251]",
+                                                                            "enabled" : "true",
+                                                                            "focused" : "false",
+                                                                            "checked" : "false",
+                                                                            "scrollable" : "false",
+                                                                            "selected" : "false",
+                                                                            "class" : "com.horcrux.svg.J",
+                                                                            "important-for-accessibility" : "false"
+                                                                          },
+                                                                          "clickable" : false,
+                                                                          "enabled" : true,
+                                                                          "focused" : false,
+                                                                          "checked" : false,
+                                                                          "selected" : false
+                                                                        } ],
+                                                                        "clickable" : false,
+                                                                        "enabled" : true,
+                                                                        "focused" : false,
+                                                                        "checked" : false,
+                                                                        "selected" : false
+                                                                      } ],
+                                                                      "clickable" : false,
+                                                                      "enabled" : true,
+                                                                      "focused" : false,
+                                                                      "checked" : false,
+                                                                      "selected" : false
+                                                                    } ],
+                                                                    "clickable" : false,
+                                                                    "enabled" : true,
+                                                                    "focused" : false,
+                                                                    "checked" : false,
+                                                                    "selected" : false
+                                                                  } ],
+                                                                  "clickable" : false,
+                                                                  "enabled" : true,
+                                                                  "focused" : false,
+                                                                  "checked" : false,
+                                                                  "selected" : false
+                                                                }, {
+                                                                  "attributes" : {
+                                                                    "ignoreBoundsFiltering" : "false",
+                                                                    "clickable" : "false",
+                                                                    "bounds" : "[540,2253][1080,2295]",
+                                                                    "enabled" : "true",
+                                                                    "focused" : "false",
+                                                                    "checked" : "false",
+                                                                    "scrollable" : "false",
+                                                                    "selected" : "false",
+                                                                    "class" : "android.view.ViewGroup",
+                                                                    "important-for-accessibility" : "false"
+                                                                  },
+                                                                  "clickable" : false,
+                                                                  "enabled" : true,
+                                                                  "focused" : false,
+                                                                  "checked" : false,
+                                                                  "selected" : false
+                                                                } ],
+                                                                "clickable" : false,
+                                                                "enabled" : true,
+                                                                "focused" : false,
+                                                                "checked" : false,
+                                                                "selected" : false
+                                                              } ],
+                                                              "clickable" : true,
+                                                              "enabled" : true,
+                                                              "focused" : false,
+                                                              "checked" : false,
+                                                              "selected" : false
+                                                            } ],
+                                                            "clickable" : false,
+                                                            "enabled" : true,
+                                                            "focused" : false,
+                                                            "checked" : false,
+                                                            "selected" : false
+                                                          } ],
+                                                          "clickable" : false,
+                                                          "enabled" : true,
+                                                          "focused" : false,
+                                                          "checked" : false,
+                                                          "selected" : false
+                                                        } ],
+                                                        "clickable" : false,
+                                                        "enabled" : true,
+                                                        "focused" : false,
+                                                        "checked" : false,
+                                                        "selected" : false
+                                                      } ],
+                                                      "clickable" : false,
+                                                      "enabled" : true,
+                                                      "focused" : false,
+                                                      "checked" : false,
+                                                      "selected" : false
+                                                    } ],
+                                                    "clickable" : false,
+                                                    "enabled" : true,
+                                                    "focused" : false,
+                                                    "checked" : false,
+                                                    "selected" : false
+                                                  } ],
+                                                  "clickable" : false,
+                                                  "enabled" : true,
+                                                  "focused" : false,
+                                                  "checked" : false,
+                                                  "selected" : false
+                                                } ],
+                                                "clickable" : false,
+                                                "enabled" : true,
+                                                "focused" : false,
+                                                "checked" : false,
+                                                "selected" : false
+                                              } ],
+                                              "clickable" : false,
+                                              "enabled" : true,
+                                              "focused" : false,
+                                              "checked" : false,
+                                              "selected" : false
+                                            }, {
+                                              "attributes" : {
+                                                "ignoreBoundsFiltering" : "false",
+                                                "clickable" : "false",
+                                                "bounds" : "[0,132][1080,300]",
+                                                "enabled" : "true",
+                                                "focused" : "false",
+                                                "checked" : "false",
+                                                "scrollable" : "false",
+                                                "selected" : "false",
+                                                "class" : "android.view.ViewGroup",
+                                                "important-for-accessibility" : "false"
+                                              },
+                                              "clickable" : false,
+                                              "enabled" : true,
+                                              "focused" : false,
+                                              "checked" : false,
+                                              "selected" : false
+                                            } ],
+                                            "clickable" : false,
+                                            "enabled" : true,
+                                            "focused" : false,
+                                            "checked" : false,
+                                            "selected" : false
+                                          } ],
+                                          "clickable" : false,
+                                          "enabled" : true,
+                                          "focused" : false,
+                                          "checked" : false,
+                                          "selected" : false
+                                        } ],
+                                        "clickable" : false,
+                                        "enabled" : true,
+                                        "focused" : false,
+                                        "checked" : false,
+                                        "selected" : false
+                                      } ],
+                                      "clickable" : false,
+                                      "enabled" : true,
+                                      "focused" : false,
+                                      "checked" : false,
+                                      "selected" : false
+                                    } ],
+                                    "clickable" : false,
+                                    "enabled" : true,
+                                    "focused" : false,
+                                    "checked" : false,
+                                    "selected" : false
+                                  } ],
+                                  "clickable" : false,
+                                  "enabled" : true,
+                                  "focused" : false,
+                                  "checked" : false,
+                                  "selected" : false
+                                }, {
+                                  "attributes" : {
+                                    "ignoreBoundsFiltering" : "false",
+                                    "clickable" : "false",
+                                    "bounds" : "[0,132][1080,300]",
+                                    "enabled" : "true",
+                                    "focused" : "false",
+                                    "checked" : "false",
+                                    "scrollable" : "false",
+                                    "selected" : "false",
+                                    "class" : "android.view.ViewGroup",
+                                    "important-for-accessibility" : "false"
+                                  },
+                                  "clickable" : false,
+                                  "enabled" : true,
+                                  "focused" : false,
+                                  "checked" : false,
+                                  "selected" : false
+                                } ],
+                                "clickable" : false,
+                                "enabled" : true,
+                                "focused" : false,
+                                "checked" : false,
+                                "selected" : false
+                              } ],
+                              "clickable" : false,
+                              "enabled" : true,
+                              "focused" : false,
+                              "checked" : false,
+                              "selected" : false
+                            } ],
+                            "clickable" : false,
+                            "enabled" : true,
+                            "focused" : false,
+                            "checked" : false,
+                            "selected" : false
+                          } ],
+                          "clickable" : false,
+                          "enabled" : true,
+                          "focused" : false,
+                          "checked" : false,
+                          "selected" : false
+                        } ],
+                        "clickable" : false,
+                        "enabled" : true,
+                        "focused" : false,
+                        "checked" : false,
+                        "selected" : false
+                      } ],
+                      "clickable" : false,
+                      "enabled" : true,
+                      "focused" : false,
+                      "checked" : false,
+                      "selected" : false
+                    } ],
+                    "clickable" : false,
+                    "enabled" : true,
+                    "focused" : false,
+                    "checked" : false,
+                    "selected" : false
+                  } ],
+                  "clickable" : false,
+                  "enabled" : true,
+                  "focused" : false,
+                  "checked" : false,
+                  "selected" : false
+                } ],
+                "clickable" : false,
+                "enabled" : true,
+                "focused" : false,
+                "checked" : false,
+                "selected" : false
+              } ],
+              "clickable" : false,
+              "enabled" : true,
+              "focused" : false,
+              "checked" : false,
+              "selected" : false
+            } ],
+            "clickable" : false,
+            "enabled" : true,
+            "focused" : false,
+            "checked" : false,
+            "selected" : false
+          }, {
+            "attributes" : {
+              "ignoreBoundsFiltering" : "false",
+              "clickable" : "false",
+              "bounds" : "[0,0][1080,132]",
+              "enabled" : "true",
+              "focused" : "false",
+              "checked" : "false",
+              "scrollable" : "false",
+              "selected" : "false",
+              "class" : "android.widget.FrameLayout",
+              "important-for-accessibility" : "true"
+            },
+            "children" : [ {
+              "attributes" : {
+                "ignoreBoundsFiltering" : "false",
+                "resource-id" : "com.android.systemui:id/status_bar_launch_animation_container",
+                "clickable" : "false",
+                "bounds" : "[0,0][1080,132]",
+                "enabled" : "true",
+                "focused" : "false",
+                "checked" : "false",
+                "scrollable" : "false",
+                "selected" : "false",
+                "class" : "android.widget.FrameLayout",
+                "important-for-accessibility" : "false"
+              },
+              "clickable" : false,
+              "enabled" : true,
+              "focused" : false,
+              "checked" : false,
+              "selected" : false
+            }, {
+              "attributes" : {
+                "ignoreBoundsFiltering" : "false",
+                "resource-id" : "com.android.systemui:id/status_bar_container",
+                "clickable" : "false",
+                "bounds" : "[0,0][1080,132]",
+                "enabled" : "true",
+                "focused" : "false",
+                "checked" : "false",
+                "scrollable" : "false",
+                "selected" : "false",
+                "class" : "android.widget.FrameLayout",
+                "important-for-accessibility" : "false"
+              },
+              "children" : [ {
+                "attributes" : {
+                  "ignoreBoundsFiltering" : "false",
+                  "resource-id" : "com.android.systemui:id/status_bar",
+                  "clickable" : "false",
+                  "bounds" : "[0,0][1080,132]",
+                  "enabled" : "true",
+                  "focused" : "false",
+                  "checked" : "false",
+                  "scrollable" : "false",
+                  "selected" : "false",
+                  "class" : "android.widget.FrameLayout",
+                  "important-for-accessibility" : "true"
+                },
+                "children" : [ {
+                  "attributes" : {
+                    "ignoreBoundsFiltering" : "false",
+                    "resource-id" : "com.android.systemui:id/status_bar_contents",
+                    "clickable" : "false",
+                    "bounds" : "[0,0][1027,132]",
+                    "enabled" : "true",
+                    "focused" : "false",
+                    "checked" : "false",
+                    "scrollable" : "false",
+                    "selected" : "false",
+                    "class" : "android.widget.LinearLayout",
+                    "important-for-accessibility" : "false"
+                  },
+                  "children" : [ {
+                    "attributes" : {
+                      "ignoreBoundsFiltering" : "false",
+                      "resource-id" : "com.android.systemui:id/status_bar_start_side_container",
+                      "clickable" : "false",
+                      "bounds" : "[42,1][463,132]",
+                      "enabled" : "true",
+                      "focused" : "false",
+                      "checked" : "false",
+                      "scrollable" : "false",
+                      "selected" : "false",
+                      "class" : "android.widget.FrameLayout",
+                      "important-for-accessibility" : "false"
+                    },
+                    "children" : [ {
+                      "attributes" : {
+                        "ignoreBoundsFiltering" : "false",
+                        "resource-id" : "com.android.systemui:id/status_bar_start_side_content",
+                        "clickable" : "false",
+                        "bounds" : "[42,1][323,132]",
+                        "enabled" : "true",
+                        "focused" : "false",
+                        "checked" : "false",
+                        "scrollable" : "false",
+                        "selected" : "false",
+                        "class" : "android.widget.FrameLayout",
+                        "important-for-accessibility" : "false"
+                      },
+                      "children" : [ {
+                        "attributes" : {
+                          "ignoreBoundsFiltering" : "false",
+                          "resource-id" : "com.android.systemui:id/status_bar_start_side_except_heads_up",
+                          "clickable" : "false",
+                          "bounds" : "[42,1][323,132]",
+                          "enabled" : "true",
+                          "focused" : "false",
+                          "checked" : "false",
+                          "scrollable" : "false",
+                          "selected" : "false",
+                          "class" : "android.widget.LinearLayout",
+                          "important-for-accessibility" : "false"
+                        },
+                        "children" : [ {
+                          "attributes" : {
+                            "text" : "10:39 ",
+                            "accessibilityText" : "10:39 AM",
+                            "ignoreBoundsFiltering" : "false",
+                            "resource-id" : "com.android.systemui:id/clock",
+                            "clickable" : "false",
+                            "bounds" : "[42,1][149,132]",
+                            "enabled" : "true",
+                            "focused" : "false",
+                            "checked" : "false",
+                            "scrollable" : "false",
+                            "selected" : "false",
+                            "class" : "android.widget.TextView",
+                            "important-for-accessibility" : "true"
+                          },
+                          "clickable" : false,
+                          "enabled" : true,
+                          "focused" : false,
+                          "checked" : false,
+                          "selected" : false
+                        }, {
+                          "attributes" : {
+                            "ignoreBoundsFiltering" : "false",
+                            "resource-id" : "com.android.systemui:id/notification_icon_area",
+                            "clickable" : "false",
+                            "bounds" : "[149,1][323,132]",
+                            "enabled" : "true",
+                            "focused" : "false",
+                            "checked" : "false",
+                            "scrollable" : "false",
+                            "selected" : "false",
+                            "class" : "android.widget.FrameLayout",
+                            "important-for-accessibility" : "false"
+                          },
+                          "children" : [ {
+                            "attributes" : {
+                              "ignoreBoundsFiltering" : "false",
+                              "resource-id" : "com.android.systemui:id/notificationIcons",
+                              "clickable" : "false",
+                              "bounds" : "[149,1][323,132]",
+                              "enabled" : "true",
+                              "focused" : "false",
+                              "checked" : "false",
+                              "scrollable" : "false",
+                              "selected" : "false",
+                              "class" : "android.view.ViewGroup",
+                              "important-for-accessibility" : "false"
+                            },
+                            "children" : [ {
+                              "attributes" : {
+                                "accessibilityText" : "Google Play Protect notification: Google Play Protect is turned on",
+                                "ignoreBoundsFiltering" : "false",
+                                "clickable" : "false",
+                                "bounds" : "[149,1][207,132]",
+                                "enabled" : "true",
+                                "focused" : "false",
+                                "checked" : "false",
+                                "scrollable" : "false",
+                                "selected" : "false",
+                                "class" : "android.widget.ImageView",
+                                "important-for-accessibility" : "true"
+                              },
+                              "clickable" : false,
+                              "enabled" : true,
+                              "focused" : false,
+                              "checked" : false,
+                              "selected" : false
+                            }, {
+                              "attributes" : {
+                                "accessibilityText" : "Android System notification: ",
+                                "ignoreBoundsFiltering" : "false",
+                                "clickable" : "false",
+                                "bounds" : "[207,1][265,132]",
+                                "enabled" : "true",
+                                "focused" : "false",
+                                "checked" : "false",
+                                "scrollable" : "false",
+                                "selected" : "false",
+                                "class" : "android.widget.ImageView",
+                                "important-for-accessibility" : "true"
+                              },
+                              "clickable" : false,
+                              "enabled" : true,
+                              "focused" : false,
+                              "checked" : false,
+                              "selected" : false
+                            }, {
+                              "attributes" : {
+                                "accessibilityText" : "Settings notification: Virtual SD card",
+                                "ignoreBoundsFiltering" : "false",
+                                "clickable" : "false",
+                                "bounds" : "[265,1][323,132]",
+                                "enabled" : "true",
+                                "focused" : "false",
+                                "checked" : "false",
+                                "scrollable" : "false",
+                                "selected" : "false",
+                                "class" : "android.widget.ImageView",
+                                "important-for-accessibility" : "true"
+                              },
+                              "clickable" : false,
+                              "enabled" : true,
+                              "focused" : false,
+                              "checked" : false,
+                              "selected" : false
+                            } ],
+                            "clickable" : false,
+                            "enabled" : true,
+                            "focused" : false,
+                            "checked" : false,
+                            "selected" : false
+                          } ],
+                          "clickable" : false,
+                          "enabled" : true,
+                          "focused" : false,
+                          "checked" : false,
+                          "selected" : false
+                        } ],
+                        "clickable" : false,
+                        "enabled" : true,
+                        "focused" : false,
+                        "checked" : false,
+                        "selected" : false
+                      } ],
+                      "clickable" : false,
+                      "enabled" : true,
+                      "focused" : false,
+                      "checked" : false,
+                      "selected" : false
+                    } ],
+                    "clickable" : false,
+                    "enabled" : true,
+                    "focused" : false,
+                    "checked" : false,
+                    "selected" : false
+                  }, {
+                    "attributes" : {
+                      "ignoreBoundsFiltering" : "false",
+                      "resource-id" : "com.android.systemui:id/cutout_space_view",
+                      "clickable" : "false",
+                      "bounds" : "[463,1][585,132]",
+                      "enabled" : "true",
+                      "focused" : "false",
+                      "checked" : "false",
+                      "scrollable" : "false",
+                      "selected" : "false",
+                      "class" : "android.view.View",
+                      "important-for-accessibility" : "false"
+                    },
+                    "clickable" : false,
+                    "enabled" : true,
+                    "focused" : false,
+                    "checked" : false,
+                    "selected" : false
+                  }, {
+                    "attributes" : {
+                      "ignoreBoundsFiltering" : "false",
+                      "resource-id" : "com.android.systemui:id/status_bar_end_side_container",
+                      "clickable" : "false",
+                      "bounds" : "[585,1][1006,132]",
+                      "enabled" : "true",
+                      "focused" : "false",
+                      "checked" : "false",
+                      "scrollable" : "false",
+                      "selected" : "false",
+                      "class" : "android.widget.FrameLayout",
+                      "important-for-accessibility" : "false"
+                    },
+                    "children" : [ {
+                      "attributes" : {
+                        "ignoreBoundsFiltering" : "false",
+                        "resource-id" : "com.android.systemui:id/status_bar_end_side_content",
+                        "clickable" : "false",
+                        "bounds" : "[885,1][1006,132]",
+                        "enabled" : "true",
+                        "focused" : "false",
+                        "checked" : "false",
+                        "scrollable" : "false",
+                        "selected" : "false",
+                        "class" : "android.widget.LinearLayout",
+                        "important-for-accessibility" : "false"
+                      },
+                      "children" : [ {
+                        "attributes" : {
+                          "ignoreBoundsFiltering" : "false",
+                          "resource-id" : "com.android.systemui:id/system_icons",
+                          "clickable" : "false",
+                          "bounds" : "[885,1][1006,132]",
+                          "enabled" : "true",
+                          "focused" : "false",
+                          "checked" : "false",
+                          "scrollable" : "false",
+                          "selected" : "false",
+                          "class" : "android.widget.LinearLayout",
+                          "important-for-accessibility" : "false"
+                        },
+                        "children" : [ {
+                          "attributes" : {
+                            "ignoreBoundsFiltering" : "false",
+                            "resource-id" : "com.android.systemui:id/statusIcons",
+                            "clickable" : "false",
+                            "bounds" : "[885,1][986,132]",
+                            "enabled" : "true",
+                            "focused" : "false",
+                            "checked" : "false",
+                            "scrollable" : "false",
+                            "selected" : "false",
+                            "class" : "android.widget.LinearLayout",
+                            "important-for-accessibility" : "false"
+                          },
+                          "children" : [ {
+                            "attributes" : {
+                              "ignoreBoundsFiltering" : "false",
+                              "resource-id" : "com.android.systemui:id/wifi_combo",
+                              "clickable" : "false",
+                              "bounds" : "[885,37][931,95]",
+                              "enabled" : "true",
+                              "focused" : "false",
+                              "checked" : "false",
+                              "scrollable" : "false",
+                              "selected" : "false",
+                              "class" : "android.widget.FrameLayout",
+                              "important-for-accessibility" : "false"
+                            },
+                            "children" : [ {
+                              "attributes" : {
+                                "ignoreBoundsFiltering" : "false",
+                                "resource-id" : "com.android.systemui:id/wifi_group",
+                                "clickable" : "false",
+                                "bounds" : "[892,37][931,95]",
+                                "enabled" : "true",
+                                "focused" : "false",
+                                "checked" : "false",
+                                "scrollable" : "false",
+                                "selected" : "false",
+                                "class" : "android.widget.LinearLayout",
+                                "important-for-accessibility" : "false"
+                              },
+                              "children" : [ {
+                                "attributes" : {
+                                  "ignoreBoundsFiltering" : "false",
+                                  "resource-id" : "com.android.systemui:id/wifi_combo",
+                                  "clickable" : "false",
+                                  "bounds" : "[892,46][931,85]",
+                                  "enabled" : "true",
+                                  "focused" : "false",
+                                  "checked" : "false",
+                                  "scrollable" : "false",
+                                  "selected" : "false",
+                                  "class" : "android.widget.FrameLayout",
+                                  "important-for-accessibility" : "false"
+                                },
+                                "children" : [ {
+                                  "attributes" : {
+                                    "accessibilityText" : "Wifi signal full.,No internet",
+                                    "ignoreBoundsFiltering" : "false",
+                                    "resource-id" : "com.android.systemui:id/wifi_signal",
+                                    "clickable" : "false",
+                                    "bounds" : "[892,46][931,85]",
+                                    "enabled" : "true",
+                                    "focused" : "false",
+                                    "checked" : "false",
+                                    "scrollable" : "false",
+                                    "selected" : "false",
+                                    "class" : "android.widget.ImageView",
+                                    "important-for-accessibility" : "true"
+                                  },
+                                  "clickable" : false,
+                                  "enabled" : true,
+                                  "focused" : false,
+                                  "checked" : false,
+                                  "selected" : false
+                                } ],
+                                "clickable" : false,
+                                "enabled" : true,
+                                "focused" : false,
+                                "checked" : false,
+                                "selected" : false
+                              } ],
+                              "clickable" : false,
+                              "enabled" : true,
+                              "focused" : false,
+                              "checked" : false,
+                              "selected" : false
+                            } ],
+                            "clickable" : false,
+                            "enabled" : true,
+                            "focused" : false,
+                            "checked" : false,
+                            "selected" : false
+                          }, {
+                            "attributes" : {
+                              "accessibilityText" : "Phone signal full.",
+                              "ignoreBoundsFiltering" : "false",
+                              "resource-id" : "com.android.systemui:id/mobile_combo",
+                              "clickable" : "false",
+                              "bounds" : "[931,37][970,95]",
+                              "enabled" : "true",
+                              "focused" : "false",
+                              "checked" : "false",
+                              "scrollable" : "false",
+                              "selected" : "false",
+                              "class" : "android.widget.FrameLayout",
+                              "important-for-accessibility" : "true"
+                            },
+                            "children" : [ {
+                              "attributes" : {
+                                "ignoreBoundsFiltering" : "false",
+                                "resource-id" : "com.android.systemui:id/mobile_group",
+                                "clickable" : "false",
+                                "bounds" : "[931,37][970,95]",
+                                "enabled" : "true",
+                                "focused" : "false",
+                                "checked" : "false",
+                                "scrollable" : "false",
+                                "selected" : "false",
+                                "class" : "android.widget.LinearLayout",
+                                "important-for-accessibility" : "false"
+                              },
+                              "children" : [ {
+                                "attributes" : {
+                                  "ignoreBoundsFiltering" : "false",
+                                  "clickable" : "false",
+                                  "bounds" : "[931,46][970,85]",
+                                  "enabled" : "true",
+                                  "focused" : "false",
+                                  "checked" : "false",
+                                  "scrollable" : "false",
+                                  "selected" : "false",
+                                  "class" : "android.widget.FrameLayout",
+                                  "important-for-accessibility" : "false"
+                                },
+                                "children" : [ {
+                                  "attributes" : {
+                                    "ignoreBoundsFiltering" : "false",
+                                    "resource-id" : "com.android.systemui:id/mobile_signal",
+                                    "clickable" : "false",
+                                    "bounds" : "[931,46][970,85]",
+                                    "enabled" : "true",
+                                    "focused" : "false",
+                                    "checked" : "false",
+                                    "scrollable" : "false",
+                                    "selected" : "false",
+                                    "class" : "android.widget.ImageView",
+                                    "important-for-accessibility" : "false"
+                                  },
+                                  "clickable" : false,
+                                  "enabled" : true,
+                                  "focused" : false,
+                                  "checked" : false,
+                                  "selected" : false
+                                } ],
+                                "clickable" : false,
+                                "enabled" : true,
+                                "focused" : false,
+                                "checked" : false,
+                                "selected" : false
+                              } ],
+                              "clickable" : false,
+                              "enabled" : true,
+                              "focused" : false,
+                              "checked" : false,
+                              "selected" : false
+                            } ],
+                            "clickable" : false,
+                            "enabled" : true,
+                            "focused" : false,
+                            "checked" : false,
+                            "selected" : false
+                          } ],
+                          "clickable" : false,
+                          "enabled" : true,
+                          "focused" : false,
+                          "checked" : false,
+                          "selected" : false
+                        }, {
+                          "attributes" : {
+                            "accessibilityText" : "Battery 100 percent.",
+                            "ignoreBoundsFiltering" : "false",
+                            "resource-id" : "com.android.systemui:id/battery",
+                            "clickable" : "false",
+                            "bounds" : "[986,1][1006,132]",
+                            "enabled" : "true",
+                            "focused" : "false",
+                            "checked" : "false",
+                            "scrollable" : "false",
+                            "selected" : "false",
+                            "class" : "android.widget.LinearLayout",
+                            "important-for-accessibility" : "true"
+                          },
+                          "children" : [ {
+                            "attributes" : {
+                              "ignoreBoundsFiltering" : "false",
+                              "clickable" : "false",
+                              "bounds" : "[986,49][1006,83]",
+                              "enabled" : "true",
+                              "focused" : "false",
+                              "checked" : "false",
+                              "scrollable" : "false",
+                              "selected" : "false",
+                              "class" : "android.widget.ImageView",
+                              "important-for-accessibility" : "false"
+                            },
+                            "clickable" : false,
+                            "enabled" : true,
+                            "focused" : false,
+                            "checked" : false,
+                            "selected" : false
+                          } ],
+                          "clickable" : false,
+                          "enabled" : true,
+                          "focused" : false,
+                          "checked" : false,
+                          "selected" : false
+                        } ],
+                        "clickable" : false,
+                        "enabled" : true,
+                        "focused" : false,
+                        "checked" : false,
+                        "selected" : false
+                      } ],
+                      "clickable" : false,
+                      "enabled" : true,
+                      "focused" : false,
+                      "checked" : false,
+                      "selected" : false
+                    } ],
+                    "clickable" : false,
+                    "enabled" : true,
+                    "focused" : false,
+                    "checked" : false,
+                    "selected" : false
+                  } ],
+                  "clickable" : false,
+                  "enabled" : true,
+                  "focused" : false,
+                  "checked" : false,
+                  "selected" : false
+                } ],
+                "clickable" : false,
+                "enabled" : true,
+                "focused" : false,
+                "checked" : false,
+                "selected" : false
+              } ],
+              "clickable" : false,
+              "enabled" : true,
+              "focused" : false,
+              "checked" : false,
+              "selected" : false
+            } ],
+            "clickable" : false,
+            "enabled" : true,
+            "focused" : false,
+            "checked" : false,
+            "selected" : false
+          } ],
+          "clickable" : false,
+          "enabled" : false,
+          "focused" : false,
+          "checked" : false,
+          "selected" : false
+        } ]
+      },
+      "debugMessage" : "Assertion '\"MyStore\" is visible' failed. Check the UI hierarchy in debug artifacts to verify the element state and properties.\n\nPossible causes:\n- Element selector may be incorrect - check if there are similar elements with slightly different names/properties.\n- Element may be temporarily unavailable due to loading state\n- This could be a real regression that needs to be addressed",
+      "stackTrace" : [ {
+        "classLoaderName" : "app",
+        "methodName" : "assertConditionCommand",
+        "fileName" : "Orchestra.kt",
+        "lineNumber" : 430,
+        "className" : "maestro.orchestra.Orchestra",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "access$assertConditionCommand",
+        "fileName" : "Orchestra.kt",
+        "lineNumber" : 123,
+        "className" : "maestro.orchestra.Orchestra",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "invokeSuspend",
+        "fileName" : "Orchestra.kt",
+        "lineNumber" : -1,
+        "className" : "maestro.orchestra.Orchestra$assertConditionCommand$1",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "resumeWith",
+        "fileName" : "ContinuationImpl.kt",
+        "lineNumber" : 34,
+        "className" : "kotlin.coroutines.jvm.internal.BaseContinuationImpl",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "run",
+        "fileName" : "DispatchedTask.kt",
+        "lineNumber" : 100,
+        "className" : "kotlinx.coroutines.DispatchedTask",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "processNextEvent",
+        "fileName" : "EventLoop.common.kt",
+        "lineNumber" : 263,
+        "className" : "kotlinx.coroutines.EventLoopImplBase",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "joinBlocking",
+        "fileName" : "Builders.kt",
+        "lineNumber" : 94,
+        "className" : "kotlinx.coroutines.BlockingCoroutine",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "runBlocking",
+        "fileName" : "Builders.kt",
+        "lineNumber" : 70,
+        "className" : "kotlinx.coroutines.BuildersKt__BuildersKt",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "runBlocking",
+        "lineNumber" : 1,
+        "className" : "kotlinx.coroutines.BuildersKt",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "runBlocking$default",
+        "fileName" : "Builders.kt",
+        "lineNumber" : 48,
+        "className" : "kotlinx.coroutines.BuildersKt__BuildersKt",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "runBlocking$default",
+        "lineNumber" : 1,
+        "className" : "kotlinx.coroutines.BuildersKt",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "runShardSuite$lambda$10",
+        "fileName" : "TestCommand.kt",
+        "lineNumber" : 504,
+        "className" : "maestro.cli.command.TestCommand",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "newSession",
+        "fileName" : "MaestroSessionManager.kt",
+        "lineNumber" : 136,
+        "className" : "maestro.cli.session.MaestroSessionManager",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "newSession$default",
+        "fileName" : "MaestroSessionManager.kt",
+        "lineNumber" : 67,
+        "className" : "maestro.cli.session.MaestroSessionManager",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "runShardSuite",
+        "fileName" : "TestCommand.kt",
+        "lineNumber" : 479,
+        "className" : "maestro.cli.command.TestCommand",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "access$runShardSuite",
+        "fileName" : "TestCommand.kt",
+        "lineNumber" : 81,
+        "className" : "maestro.cli.command.TestCommand",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "invokeSuspend",
+        "fileName" : "TestCommand.kt",
+        "lineNumber" : 438,
+        "className" : "maestro.cli.command.TestCommand$handleSessions$1$results$1$1",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "resumeWith",
+        "fileName" : "ContinuationImpl.kt",
+        "lineNumber" : 34,
+        "className" : "kotlin.coroutines.jvm.internal.BaseContinuationImpl",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "run",
+        "fileName" : "DispatchedTask.kt",
+        "lineNumber" : 100,
+        "className" : "kotlinx.coroutines.DispatchedTask",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "run",
+        "fileName" : "LimitedDispatcher.kt",
+        "lineNumber" : 124,
+        "className" : "kotlinx.coroutines.internal.LimitedDispatcher$Worker",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "run",
+        "fileName" : "Tasks.kt",
+        "lineNumber" : 89,
+        "className" : "kotlinx.coroutines.scheduling.TaskImpl",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "runSafely",
+        "fileName" : "CoroutineScheduler.kt",
+        "lineNumber" : 586,
+        "className" : "kotlinx.coroutines.scheduling.CoroutineScheduler",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "executeTask",
+        "fileName" : "CoroutineScheduler.kt",
+        "lineNumber" : 820,
+        "className" : "kotlinx.coroutines.scheduling.CoroutineScheduler$Worker",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "runWorker",
+        "fileName" : "CoroutineScheduler.kt",
+        "lineNumber" : 717,
+        "className" : "kotlinx.coroutines.scheduling.CoroutineScheduler$Worker",
+        "nativeMethod" : false
+      }, {
+        "classLoaderName" : "app",
+        "methodName" : "run",
+        "fileName" : "CoroutineScheduler.kt",
+        "lineNumber" : 704,
+        "className" : "kotlinx.coroutines.scheduling.CoroutineScheduler$Worker",
+        "nativeMethod" : false
+      } ],
+      "localizedMessage" : "Assertion is false: \"MyStore\" is visible"
+    },
+    "sequenceNumber" : 3
+  }
+}, {
+  "command" : {
+    "launchAppCommand" : {
+      "appId" : "host.exp.exponent",
+      "clearState" : true,
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1782221960652,
+    "duration" : 10208,
+    "sequenceNumber" : 2
+  }
+} ]

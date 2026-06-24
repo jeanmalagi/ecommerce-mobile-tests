@@ -1,0 +1,16 @@
+# Cenario: Login com sucesso como administrador
+appId: host.exp.exponent
+---
+- launchApp:
+    clearState: false
+
+- runFlow: ../_helpers/open-project-in-expo-go.yaml
+
+- runFlow: ../_helpers/login-as-admin.yaml
+
+- assertVisible:
+    id: "admin-dashboard-title"
+- assertVisible:
+    id: "admin-metric-sales"
+- assertVisible:
+    id: "admin-metric-orders"

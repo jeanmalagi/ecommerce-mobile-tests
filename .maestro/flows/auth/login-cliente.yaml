@@ -1,0 +1,14 @@
+# Cenario: Login com sucesso como cliente
+appId: host.exp.exponent
+---
+- launchApp:
+    clearState: true
+
+- runFlow: ../_helpers/open-project-in-expo-go.yaml
+
+- runFlow: ../_helpers/login-as-customer.yaml
+
+- assertVisible:
+    id: "customer-products-title"
+- assertVisible:
+    id: "customer-brand"

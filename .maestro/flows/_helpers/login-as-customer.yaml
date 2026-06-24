@@ -1,0 +1,23 @@
+# Subflow reutilizavel: Login como cliente
+# Deve ser chamado a partir de um fluxo principal com app iniciado
+appId: host.exp.exponent
+---
+
+- runFlow:
+    when:
+      visible:
+        id: "input-email"
+    file: ./fill-customer-credentials.yaml
+
+- hideKeyboard
+
+- tapOn:
+    id: "btn-entrar"
+    optional: true
+
+- tapOn:
+    text: "Entrar"
+    optional: true
+
+- assertVisible:
+    id: "customer-products-title"

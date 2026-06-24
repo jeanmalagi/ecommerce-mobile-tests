@@ -1,0 +1,36 @@
+# Cenario: Login com credenciais invalidas deve exibir erro
+appId: host.exp.exponent
+---
+- launchApp:
+    clearState: true
+
+- runFlow: ../_helpers/open-project-in-expo-go.yaml
+
+- extendedWaitUntil:
+    visible: "Bem-vindo de volta"
+    timeout: 30000
+
+- assertVisible: "Bem-vindo de volta"
+
+- tapOn:
+    id: "input-email"
+- eraseText
+- inputText: "admin@email.com"
+
+- tapOn:
+    id: "input-senha"
+- eraseText
+- inputText: "senha_errada"
+
+- tapOn:
+    id: "btn-entrar"
+
+- assertVisible: "Falha no login"
+
+- tapOn:
+    text: "OK"
+    optional: true
+
+- tapOn:
+    text: "Ok"
+    optional: true

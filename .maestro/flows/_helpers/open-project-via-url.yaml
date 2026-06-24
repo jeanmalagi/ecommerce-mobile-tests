@@ -1,0 +1,7 @@
+# Fallback para abrir projeto no Expo Go digitando a URL
+appId: host.exp.exponent
+---
+
+- tapOn: "Enter URL manually"
+- inputText: ${EXPO_URL}
+- pressKey: Enter

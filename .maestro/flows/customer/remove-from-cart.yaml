@@ -1,0 +1,52 @@
+# Cenario: Cliente remove item do carrinho
+appId: host.exp.exponent
+---
+- launchApp:
+    clearState: true
+
+- runFlow: ../_helpers/open-project-in-expo-go.yaml
+
+- extendedWaitUntil:
+    visible: "Bem-vindo de volta"
+    timeout: 30000
+
+- runFlow: ../_helpers/login-as-customer.yaml
+
+- extendedWaitUntil:
+    visible:
+      id: "customer-products-title"
+    timeout: 15000
+
+- tapOn:
+    id: "product-card"
+    index: 0
+
+- extendedWaitUntil:
+    visible:
+      id: "btn-add-to-cart"
+    timeout: 15000
+
+- tapOn:
+    id: "btn-add-to-cart"
+
+- tapOn:
+    id: "cart-success-ok"
+    optional: true
+- tapOn:
+    text: "OK"
+    optional: true
+
+- tapOn: "Carrinho"
+- assertVisible: "Carrinho"
+- waitForAnimationToEnd
+
+- tapOn:
+    id: "cart-item-remove"
+    index: 0
+- assertVisible:
+    id: "remove-modal-title"
+- tapOn:
+    id: "remove-modal-confirm"
+
+- assertVisible:
+    id: "cart-total"

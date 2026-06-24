@@ -1,0 +1,46 @@
+# Cenario: Cliente adiciona produto ao carrinho
+appId: host.exp.exponent
+---
+- launchApp:
+    clearState: true
+
+- runFlow: ../_helpers/open-project-in-expo-go.yaml
+
+- extendedWaitUntil:
+    visible: "Bem-vindo de volta"
+    timeout: 30000
+
+- runFlow: ../_helpers/login-as-customer.yaml
+
+- extendedWaitUntil:
+    visible:
+      id: "customer-products-title"
+    timeout: 15000
+
+- tapOn:
+    id: "product-card"
+    index: 0
+
+- extendedWaitUntil:
+    visible:
+      id: "btn-add-to-cart"
+    timeout: 15000
+
+- tapOn:
+    id: "btn-add-to-cart"
+
+- extendedWaitUntil:
+    visible:
+      id: "cart-success-title"
+    timeout: 10000
+
+- assertVisible:
+    id: "cart-success-message"
+
+- tapOn:
+    id: "cart-success-ok"
+
+- extendedWaitUntil:
+    visible:
+      id: "customer-products-title"
+    timeout: 15000

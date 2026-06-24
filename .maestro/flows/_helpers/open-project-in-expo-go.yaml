@@ -1,0 +1,5 @@
+# Abre o projeto no Expo Go quando estiver na tela Home do Expo
+appId: host.exp.exponent
+---
+
+- openLink: ${EXPO_URL}
