@@ -236,7 +236,7 @@ pipeline {
                     "-gpu", "swiftshader_indirect"
                 ) | Out-Null
 
-                adb wait-for-device | Out-Null
+                adb wait-for-device 2>$null | Out-Null
 
                 $maxRetries = 60
                 for ($i = 0; $i -lt $maxRetries; $i++) {
@@ -265,15 +265,45 @@ pipeline {
                 @echo off
                 setlocal EnableDelayedExpansion
 
-                adb shell pm list packages | findstr "host.exp.exponent" >nul 2>&1
+                echo ==========================================
+                echo Validando emulador ativo
+                echo ==========================================
+
+                set EMU_SERIAL=
+                set RETRY=0
+
+                :find_emulator
+                for /f "tokens=1" %%i in ('adb devices ^| findstr /R "^emulator-[0-9][0-9][0-9][0-9][ ]*device"') do (
+                    set EMU_SERIAL=%%i
+                    goto emulator_found
+                )
+
+                set /A RETRY+=1
+
+                if !RETRY! GEQ 24 (
+                    echo Nenhum emulador Android online encontrado apos 2 minutos.
+                    adb devices
+                    exit /b 1
+                )
+
+                timeout /t 5 >nul
+                goto find_emulator
+
+                :emulator_found
+                echo Emulador selecionado: !EMU_SERIAL!
+
+                adb -s !EMU_SERIAL! wait-for-device
+
+                adb -s !EMU_SERIAL! shell pm list packages | findstr "host.exp.exponent" >nul 2>&1
 
                 if !ERRORLEVEL! NEQ 0 (
 
                     echo Baixando Expo Go...
 
-                    curl -L -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.31.3.apk
+                    curl --fail --retry 3 --retry-delay 5 -L -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.31.3.apk
 
-                    adb install expo-go.apk
+                    echo Instalando Expo Go no emulador...
+                    adb -s !EMU_SERIAL! install -r expo-go.apk
                 )
 
                 echo Expo Go instalado
@@ -285,35 +315,51 @@ pipeline {
             steps {
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat 'maestro test .maestro/flows/auth/login-admin.yaml --format junit --output test-results/login-admin.xml'
+                    timeout(time: 4, unit: 'MINUTES') {
+                        bat 'maestro test .maestro/flows/auth/login-admin.yaml --format junit --output test-results/login-admin.xml'
+                    }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat 'maestro test .maestro/flows/auth/login-cliente.yaml --format junit --output test-results/login-cliente.xml'
+                    timeout(time: 4, unit: 'MINUTES') {
+                        bat 'maestro test .maestro/flows/auth/login-cliente.yaml --format junit --output test-results/login-cliente.xml'
+                    }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat 'maestro test .maestro/flows/auth/login-credenciais-invalidas.yaml --format junit --output test-results/login-invalido.xml'
+                    timeout(time: 4, unit: 'MINUTES') {
+                        bat 'maestro test .maestro/flows/auth/login-credenciais-invalidas.yaml --format junit --output test-results/login-invalido.xml'
+                    }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat 'maestro test .maestro/flows/auth/register.yaml --format junit --output test-results/register.xml'
+                    timeout(time: 4, unit: 'MINUTES') {
+                        bat 'maestro test .maestro/flows/auth/register.yaml --format junit --output test-results/register.xml'
+                    }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat 'maestro test .maestro/flows/customer/browse-products.yaml --format junit --output test-results/browse-products.xml'
+                    timeout(time: 4, unit: 'MINUTES') {
+                        bat 'maestro test .maestro/flows/customer/browse-products.yaml --format junit --output test-results/browse-products.xml'
+                    }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat 'maestro test .maestro/flows/customer/add-to-cart.yaml --format junit --output test-results/add-to-cart.xml'
+                    timeout(time: 4, unit: 'MINUTES') {
+                        bat 'maestro test .maestro/flows/customer/add-to-cart.yaml --format junit --output test-results/add-to-cart.xml'
+                    }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat 'maestro test .maestro/flows/customer/remove-from-cart.yaml --format junit --output test-results/remove-from-cart.xml'
+                    timeout(time: 4, unit: 'MINUTES') {
+                        bat 'maestro test .maestro/flows/customer/remove-from-cart.yaml --format junit --output test-results/remove-from-cart.xml'
+                    }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat 'maestro test .maestro/flows/customer/checkout.yaml --format junit --output test-results/checkout.xml'
+                    timeout(time: 4, unit: 'MINUTES') {
+                        bat 'maestro test .maestro/flows/customer/checkout.yaml --format junit --output test-results/checkout.xml'
+                    }
                 }
             }
         }
