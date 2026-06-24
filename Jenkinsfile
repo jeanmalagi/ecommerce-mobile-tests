@@ -274,10 +274,11 @@ pipeline {
 
                 for ($i = 0; $i -lt $maxRetries; $i++) {
                     $deviceLines = @(adb devices | Select-Object -Skip 1 | ForEach-Object { $_.Trim() } | Where-Object { $_ })
-                    $emulatorLines = @($deviceLines | Where-Object { $_ -match '^emulator-\d+\s+device$' })
+                    $emulatorLines = @($deviceLines | Where-Object { $_.StartsWith('emulator-') -and $_.EndsWith('device') })
 
                     if ($emulatorLines.Count -gt 0) {
-                        $emuSerial = ($emulatorLines[0] -split '\s+')[0]
+                        $normalizedLine = $emulatorLines[0].Replace("`t", " ")
+                        $emuSerial = $normalizedLine.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
                         break
                     }
 
