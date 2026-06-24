@@ -128,24 +128,44 @@ pipeline {
                 @echo off
                 setlocal EnableDelayedExpansion
 
-                echo Iniciando emulador %ANDROID_AVD%...
+                echo ==========================================
+                echo Diagnostico Android
+                echo ==========================================
 
-                start /B emulator -avd %ANDROID_AVD% -no-snapshot-load -no-audio -no-boot-anim
+                whoami
+
+                echo USERPROFILE=%USERPROFILE%
+                echo HOME=%HOME%
+
+                where adb
+                where emulator
+
+                emulator -list-avds
+
+                echo ==========================================
+                echo Iniciando emulador %ANDROID_AVD%
+                echo ==========================================
+
+                start "" emulator -avd %ANDROID_AVD% -no-snapshot-load -no-audio -no-boot-anim
+
+                adb wait-for-device
 
                 set RETRY=0
 
                 :loop
 
-                adb shell getprop sys.boot_completed 2>nul | findstr "1" >nul
+                for /f %%i in ('adb shell getprop sys.boot_completed') do set BOOT=%%i
 
-                if !ERRORLEVEL!==0 (
+                echo Boot status: !BOOT!
+
+                if "!BOOT!"=="1" (
                     echo Emulador pronto
                     goto end
                 )
 
                 set /A RETRY+=1
 
-                if !RETRY! GEQ 40 (
+                if !RETRY! GEQ 60 (
                     echo Emulador nao inicializou
                     exit /b 1
                 )
@@ -157,6 +177,8 @@ pipeline {
                 :end
 
                 adb shell input keyevent 82
+
+                echo Emulador desbloqueado
                 '''
             }
         }
