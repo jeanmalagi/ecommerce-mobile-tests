@@ -295,7 +295,7 @@ pipeline {
                 adb -s $emuSerial wait-for-device | Out-Null
 
                 $packages = adb -s $emuSerial shell pm list packages
-                $hasExpoGo = $packages | Select-String -Pattern 'host\.exp\.exponent' -SimpleMatch
+                $hasExpoGo = @($packages) -match 'host.exp.exponent'
 
                 if (-not $hasExpoGo) {
                     Write-Host "Baixando Expo Go..."
