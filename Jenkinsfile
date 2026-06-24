@@ -186,11 +186,12 @@ pipeline {
                     $candidateAvdHomes += $env:ANDROID_AVD_HOME
                 }
 
-                if ($sdkRoot -match '^(?<userProfile>.+)\\AppData\\Local\\Android\\Sdk$') {
-                    $candidateAvdHomes += (Join-Path $matches.userProfile '.android/avd')
+                $sdkOwnerProfile = Split-Path (Split-Path (Split-Path (Split-Path $sdkRoot -Parent) -Parent) -Parent) -Parent
+                if ($sdkOwnerProfile -and (Test-Path $sdkOwnerProfile)) {
+                    $candidateAvdHomes += (Join-Path $sdkOwnerProfile '.android/avd')
 
                     if (-not $env:HOME) {
-                        $env:HOME = $matches.userProfile
+                        $env:HOME = $sdkOwnerProfile
                     }
                 }
 
