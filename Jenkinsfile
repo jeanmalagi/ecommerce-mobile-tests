@@ -260,53 +260,52 @@ pipeline {
 
         stage('Install Expo Go') {
             steps {
+                powershell '''
+                $ErrorActionPreference = 'Stop'
 
-                bat '''
-                @echo off
-                setlocal EnableDelayedExpansion
+                Write-Host "=========================================="
+                Write-Host "Validando emulador ativo"
+                Write-Host "=========================================="
 
-                echo ==========================================
-                echo Validando emulador ativo
-                echo ==========================================
+                adb start-server | Out-Null
 
-                set EMU_SERIAL=
-                set RETRY=0
+                $emuSerial = $null
+                $maxRetries = 24
 
-                :find_emulator
-                for /f "tokens=1" %%i in ('adb devices ^| findstr /R "^emulator-[0-9][0-9][0-9][0-9][ ]*device"') do (
-                    set EMU_SERIAL=%%i
-                    goto emulator_found
-                )
+                for ($i = 0; $i -lt $maxRetries; $i++) {
+                    $deviceLines = @(adb devices | Select-Object -Skip 1 | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+                    $emulatorLines = @($deviceLines | Where-Object { $_ -match '^emulator-\d+\s+device$' })
 
-                set /A RETRY+=1
+                    if ($emulatorLines.Count -gt 0) {
+                        $emuSerial = ($emulatorLines[0] -split '\s+')[0]
+                        break
+                    }
 
-                if !RETRY! GEQ 24 (
-                    echo Nenhum emulador Android online encontrado apos 2 minutos.
+                    Start-Sleep -Seconds 5
+                }
+
+                if (-not $emuSerial) {
+                    Write-Host "Saida atual do adb devices:"
                     adb devices
-                    exit /b 1
-                )
+                    throw "Nenhum emulador Android online encontrado apos 2 minutos."
+                }
 
-                timeout /t 5 >nul
-                goto find_emulator
+                Write-Host "Emulador selecionado: $emuSerial"
+                adb -s $emuSerial wait-for-device | Out-Null
 
-                :emulator_found
-                echo Emulador selecionado: !EMU_SERIAL!
+                $packages = adb -s $emuSerial shell pm list packages
+                $hasExpoGo = $packages | Select-String -Pattern 'host\.exp\.exponent' -SimpleMatch
 
-                adb -s !EMU_SERIAL! wait-for-device
+                if (-not $hasExpoGo) {
+                    Write-Host "Baixando Expo Go..."
+                    $apkPath = Join-Path $PWD 'expo-go.apk'
+                    Invoke-WebRequest -Uri 'https://d1ahtucjixef4r.cloudfront.net/Exponent-2.31.3.apk' -OutFile $apkPath -UseBasicParsing
 
-                adb -s !EMU_SERIAL! shell pm list packages | findstr "host.exp.exponent" >nul 2>&1
+                    Write-Host "Instalando Expo Go no emulador..."
+                    adb -s $emuSerial install -r $apkPath | Out-Host
+                }
 
-                if !ERRORLEVEL! NEQ 0 (
-
-                    echo Baixando Expo Go...
-
-                    curl --fail --retry 3 --retry-delay 5 -L -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.31.3.apk
-
-                    echo Instalando Expo Go no emulador...
-                    adb -s !EMU_SERIAL! install -r expo-go.apk
-                )
-
-                echo Expo Go instalado
+                Write-Host "Expo Go instalado"
                 '''
             }
         }
