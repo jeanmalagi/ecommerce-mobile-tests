@@ -123,62 +123,69 @@ pipeline {
 
         stage('Start Android Emulator') {
             steps {
+                powershell '''
+                $ErrorActionPreference = 'Stop'
 
-                bat '''
-                @echo off
-                setlocal EnableDelayedExpansion
-
-                echo ==========================================
-                echo Diagnostico Android
-                echo ==========================================
-
+                Write-Host "=========================================="
+                Write-Host "Diagnostico Android"
+                Write-Host "=========================================="
                 whoami
+                Write-Host "USERPROFILE=$env:USERPROFILE"
+                Write-Host "HOME=$env:HOME"
 
-                echo USERPROFILE=%USERPROFILE%
-                echo HOME=%HOME%
+                Write-Host "adb:"
+                where.exe adb
+                Write-Host "emulator:"
+                where.exe emulator
 
-                where adb
-                where emulator
+                $avds = @(emulator -list-avds | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 
-                emulator -list-avds
+                if ($avds.Count -eq 0) {
+                    throw "Nenhum AVD encontrado no agente Jenkins. Crie um AVD ou configure ANDROID_AVD_HOME."
+                }
 
-                echo ==========================================
-                echo Iniciando emulador %ANDROID_AVD%
-                echo ==========================================
+                $preferredAvd = $env:ANDROID_AVD
+                if ($preferredAvd -and ($avds -contains $preferredAvd)) {
+                    $avdToStart = $preferredAvd
+                }
+                else {
+                    if ($preferredAvd) {
+                        Write-Host "AVD '$preferredAvd' nao encontrado. Usando '$($avds[0])'."
+                    }
+                    $avdToStart = $avds[0]
+                }
 
-                start "" emulator -avd %ANDROID_AVD% -no-snapshot-load -no-audio -no-boot-anim
+                Write-Host "=========================================="
+                Write-Host "Iniciando emulador $avdToStart"
+                Write-Host "=========================================="
 
-                adb wait-for-device
+                Start-Process -FilePath "emulator" -ArgumentList @(
+                    "-avd", $avdToStart,
+                    "-no-snapshot-load",
+                    "-no-audio",
+                    "-no-boot-anim",
+                    "-no-window",
+                    "-gpu", "swiftshader_indirect"
+                ) | Out-Null
 
-                set RETRY=0
+                adb wait-for-device | Out-Null
 
-                :loop
+                $maxRetries = 60
+                for ($i = 0; $i -lt $maxRetries; $i++) {
+                    $boot = (adb shell getprop sys.boot_completed 2>$null).Trim()
+                    Write-Host "Boot status: $boot"
 
-                for /f %%i in ('adb shell getprop sys.boot_completed') do set BOOT=%%i
+                    if ($boot -eq '1') {
+                        Write-Host "Emulador pronto"
+                        adb shell input keyevent 82 | Out-Null
+                        Write-Host "Emulador desbloqueado"
+                        exit 0
+                    }
 
-                echo Boot status: !BOOT!
+                    Start-Sleep -Seconds 5
+                }
 
-                if "!BOOT!"=="1" (
-                    echo Emulador pronto
-                    goto end
-                )
-
-                set /A RETRY+=1
-
-                if !RETRY! GEQ 60 (
-                    echo Emulador nao inicializou
-                    exit /b 1
-                )
-
-                timeout /t 5 >nul
-
-                goto loop
-
-                :end
-
-                adb shell input keyevent 82
-
-                echo Emulador desbloqueado
+                throw "Emulador nao inicializou"
                 '''
             }
         }
