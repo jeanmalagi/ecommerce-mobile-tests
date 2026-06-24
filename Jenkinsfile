@@ -178,10 +178,37 @@ pipeline {
                 Write-Host "emulator:"
                 where.exe emulator
 
+                $emulatorCommand = Get-Command emulator -ErrorAction Stop
+                $sdkRoot = Split-Path $emulatorCommand.Source -Parent | Split-Path -Parent
+
+                $candidateAvdHomes = @()
+                if ($env:ANDROID_AVD_HOME) {
+                    $candidateAvdHomes += $env:ANDROID_AVD_HOME
+                }
+
+                if ($sdkRoot -match '^(?<userProfile>.+)\\AppData\\Local\\Android\\Sdk$') {
+                    $candidateAvdHomes += (Join-Path $matches.userProfile '.android\avd')
+
+                    if (-not $env:HOME) {
+                        $env:HOME = $matches.userProfile
+                    }
+                }
+
+                $candidateAvdHomes += (Join-Path $env:USERPROFILE '.android\avd')
+                $candidateAvdHomes = @($candidateAvdHomes | Where-Object { $_ } | Select-Object -Unique)
+
+                foreach ($candidateAvdHome in $candidateAvdHomes) {
+                    if (Test-Path $candidateAvdHome) {
+                        $env:ANDROID_AVD_HOME = $candidateAvdHome
+                        Write-Host "ANDROID_AVD_HOME=$env:ANDROID_AVD_HOME"
+                        break
+                    }
+                }
+
                 $avds = @(emulator -list-avds | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 
                 if ($avds.Count -eq 0) {
-                    throw "Nenhum AVD encontrado no agente Jenkins. Crie um AVD ou configure ANDROID_AVD_HOME."
+                    throw "Nenhum AVD encontrado no agente Jenkins. Configure ANDROID_AVD_HOME para um diretorio existente ou execute o job em um usuario que tenha acesso aos AVDs."
                 }
 
                 $preferredAvd = $env:ANDROID_AVD
