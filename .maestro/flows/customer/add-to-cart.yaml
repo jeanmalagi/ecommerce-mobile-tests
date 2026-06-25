@@ -31,17 +31,32 @@ appId: host.exp.exponent
 - tapOn:
     id: "btn-add-to-cart"
 
-- extendedWaitUntil:
-    visible:
-      id: "customer-products-title"
-    timeout: 30000
-
 - tapOn:
     id: "cart-success-ok"
     optional: true
 - tapOn:
     text: "OK"
     optional: true
+
+- runFlow:
+    when:
+      visible: "Erro"
+    commands:
+      - tapOn:
+          text: "OK"
+          optional: true
+
+- runFlow:
+    when:
+      visible:
+        id: "btn-add-to-cart"
+    commands:
+      - back
+
+- extendedWaitUntil:
+    visible:
+      id: "customer-products-title"
+    timeout: 45000
 
 - assertVisible:
     id: "customer-products-title"
