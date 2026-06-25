@@ -577,6 +577,46 @@ services:
                 '''
             }
         }
+
+        stage('Publish Test Summary') {
+            steps {
+                script {
+                    def resultFiles = findFiles(glob: 'test-results/*.xml')
+
+                    int totalTests = 0
+                    int totalFailures = 0
+                    int totalSkipped = 0
+
+                    resultFiles.each { file ->
+                        def xml = new XmlSlurper().parseText(readFile(file.path))
+
+                        if (xml.name() == 'testsuite') {
+                            totalTests += (xml.@tests.text() ?: '0') as Integer
+                            totalFailures += (xml.@failures.text() ?: '0') as Integer
+                            totalSkipped += (xml.@skipped.text() ?: '0') as Integer
+                        }
+                        else if (xml.name() == 'testsuites') {
+                            xml.testsuite.each { suite ->
+                                totalTests += (suite.@tests.text() ?: '0') as Integer
+                                totalFailures += (suite.@failures.text() ?: '0') as Integer
+                                totalSkipped += (suite.@skipped.text() ?: '0') as Integer
+                            }
+                        }
+                    }
+
+                    int totalPassed = totalTests - totalFailures - totalSkipped
+                    def summary = "Tests: ${totalTests} | Passed: ${totalPassed} | Failed: ${totalFailures} | Skipped: ${totalSkipped}"
+
+                    currentBuild.description = summary
+                    writeFile file: 'test-results/summary.txt', text: summary + "\n"
+
+                    echo summary
+                }
+
+                archiveArtifacts artifacts: 'test-results/summary.txt',
+                                 allowEmptyArchive: true
+            }
+        }
     }
 
     post {
