@@ -2,9 +2,15 @@
 appId: host.exp.exponent
 ---
 - launchApp:
-    clearState: false
+    clearState: true
 
 - runFlow: ../_helpers/open-project-in-expo-go.yaml
+
+- extendedWaitUntil:
+    visible: "Bem-vindo de volta"
+    timeout: 30000
+
+- assertVisible: "Bem-vindo de volta"
 
 - runFlow: ../_helpers/login-as-admin.yaml
 

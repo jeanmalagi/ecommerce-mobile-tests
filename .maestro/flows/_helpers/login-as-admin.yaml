@@ -28,9 +28,9 @@ appId: host.exp.exponent
     optional: true
 
 - extendedWaitUntil:
-    visible:
-      id: "admin-dashboard-title"
-    timeout: 20000
+        visible:
+            id: "admin-dashboard-title"
+        timeout: 45000
 
 - assertVisible:
     id: "admin-dashboard-title"

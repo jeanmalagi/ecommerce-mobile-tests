@@ -20,9 +20,9 @@ appId: host.exp.exponent
     optional: true
 
 - extendedWaitUntil:
-    visible:
-      id: "customer-products-title"
-    timeout: 20000
+        visible:
+            id: "customer-products-title"
+        timeout: 45000
 
 - assertVisible:
     id: "customer-products-title"

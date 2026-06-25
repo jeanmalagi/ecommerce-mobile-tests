@@ -6,6 +6,12 @@ appId: host.exp.exponent
 
 - runFlow: ../_helpers/open-project-in-expo-go.yaml
 
+- extendedWaitUntil:
+    visible: "Bem-vindo de volta"
+    timeout: 30000
+
+- assertVisible: "Bem-vindo de volta"
+
 - runFlow: ../_helpers/login-as-customer.yaml
 
 - assertVisible:
