@@ -23,5 +23,14 @@ appId: host.exp.exponent
     id: "btn-entrar"
     optional: true
 
+- tapOn:
+    text: "Entrar"
+    optional: true
+
+- extendedWaitUntil:
+    visible:
+      id: "admin-dashboard-title"
+    timeout: 20000
+
 - assertVisible:
     id: "admin-dashboard-title"

@@ -22,8 +22,15 @@ appId: host.exp.exponent
 - eraseText
 - inputText: "senha_errada"
 
+- hideKeyboard
+
 - tapOn:
     id: "btn-entrar"
+    optional: true
+
+- tapOn:
+    text: "Entrar"
+    optional: true
 
 - assertVisible: "Falha no login"
 

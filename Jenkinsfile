@@ -69,8 +69,17 @@ pipeline {
 
                 Push-Location 'ecommerce-fullstack'
                 try {
+                    $overrideCompose = @"
+services:
+  backend:
+    environment:
+      JWT_SECRET: jenkins-mobile-tests-secret
+"@
+
+                    Set-Content -Path 'docker-compose.jenkins.yml' -Value $overrideCompose -Encoding ASCII
+
                     docker compose down -v
-                    docker compose up -d --build
+                    docker compose -f docker-compose.yml -f docker-compose.jenkins.yml up -d --build
                 }
                 finally {
                     Pop-Location
@@ -104,6 +113,59 @@ pipeline {
                 }
 
                 throw "API nao subiu"
+                '''
+            }
+        }
+
+        stage('Seed Test Users') {
+            steps {
+                powershell '''
+                $ErrorActionPreference = 'Stop'
+
+                function Ensure-User {
+                    param(
+                        [string]$Name,
+                        [string]$Email,
+                        [string]$Password
+                    )
+
+                    $payload = @{
+                        name = $Name
+                        email = $Email
+                        password = $Password
+                    } | ConvertTo-Json
+
+                    try {
+                        Invoke-RestMethod \
+                            -Method Post \
+                            -Uri 'http://localhost:3000/api/users/register' \
+                            -ContentType 'application/json' \
+                            -Body $payload \
+                            -TimeoutSec 10 | Out-Null
+
+                        Write-Host "Usuario criado: $Email"
+                    }
+                    catch {
+                        $response = $_.Exception.Response
+                        if ($response -and [int]$response.StatusCode -eq 400) {
+                            Write-Host "Usuario ja existe: $Email"
+                        }
+                        else {
+                            throw
+                        }
+                    }
+                }
+
+                Ensure-User -Name 'Admin CI' -Email 'admin@email.com' -Password '123456'
+                Ensure-User -Name 'Cliente CI' -Email 'cliente@email.com' -Password '123456'
+
+                Push-Location 'ecommerce-fullstack'
+                try {
+                    docker compose exec -T db psql -U postgres -d ecommerce -c "UPDATE users SET is_admin = true WHERE email = 'admin@email.com';"
+                }
+                finally {
+                    Pop-Location
+                }
                 '''
             }
         }

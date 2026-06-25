@@ -19,5 +19,10 @@ appId: host.exp.exponent
     text: "Entrar"
     optional: true
 
+- extendedWaitUntil:
+    visible:
+      id: "customer-products-title"
+    timeout: 20000
+
 - assertVisible:
     id: "customer-products-title"
