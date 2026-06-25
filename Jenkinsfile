@@ -342,22 +342,22 @@ pipeline {
 
                     Expand-Archive -Path $maestroZip -DestinationPath $maestroDir -Force
 
-                    $candidates = @(
-                        (Join-Path $maestroDir 'bin/maestro.bat'),
-                        (Join-Path $maestroDir 'bin/maestro.cmd'),
-                        (Join-Path $maestroDir 'maestro.exe'),
-                        (Join-Path $maestroDir 'bin/maestro.exe'),
-                        (Join-Path $maestroDir 'bin/maestro')
-                    )
+                    $candidateNames = @('maestro.bat', 'maestro.cmd', 'maestro.exe', 'maestro')
+                    $maestroCandidates = Get-ChildItem -Path $maestroDir -Recurse -File -ErrorAction SilentlyContinue |
+                        Where-Object { $candidateNames -contains $_.Name } |
+                        Sort-Object FullName
 
-                    foreach ($candidate in $candidates) {
-                        if (Test-Path $candidate) {
-                            $maestroBin = $candidate
-                            break
+                    if ($maestroCandidates.Count -gt 0) {
+                        $preferred = $maestroCandidates | Where-Object { $_.Name -eq 'maestro.bat' } | Select-Object -First 1
+                        if (-not $preferred) {
+                            $preferred = $maestroCandidates | Select-Object -First 1
                         }
+                        $maestroBin = $preferred.FullName
                     }
 
                     if (-not $maestroBin) {
+                        Write-Host "Conteudo extraido em $maestroDir (amostra):"
+                        Get-ChildItem -Path $maestroDir -Recurse -File | Select-Object -First 20 FullName | Format-Table -AutoSize | Out-Host
                         throw "Nao foi possivel localizar o executavel do Maestro apos extrair maestro.zip."
                     }
 
