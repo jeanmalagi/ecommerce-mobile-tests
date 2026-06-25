@@ -607,19 +607,27 @@ services:
                     }
 
                     try {
-                        def xml = new XmlSlurper().parseText(readFile(file))
+                        def content = readFile(file)
                         parsedFiles++
 
-                        if (xml.name() == 'testsuite') {
-                            totalTests += (xml.@tests.text() ?: '0') as Integer
-                            totalFailures += (xml.@failures.text() ?: '0') as Integer
-                            totalSkipped += (xml.@skipped.text() ?: '0') as Integer
-                        }
-                        else if (xml.name() == 'testsuites') {
-                            xml.testsuite.each { suite ->
-                                totalTests += (suite.@tests.text() ?: '0') as Integer
-                                totalFailures += (suite.@failures.text() ?: '0') as Integer
-                                totalSkipped += (suite.@skipped.text() ?: '0') as Integer
+                        def suiteTags = (content =~ /<testsuite\b[^>]*>/)
+
+                        suiteTags.each { match ->
+                            String suiteTag = match[0]
+
+                            def testsMatch = (suiteTag =~ /\btests="(\d+)"/)
+                            if (testsMatch.find()) {
+                                totalTests += testsMatch.group(1) as Integer
+                            }
+
+                            def failuresMatch = (suiteTag =~ /\bfailures="(\d+)"/)
+                            if (failuresMatch.find()) {
+                                totalFailures += failuresMatch.group(1) as Integer
+                            }
+
+                            def skippedMatch = (suiteTag =~ /\bskipped="(\d+)"/)
+                            if (skippedMatch.find()) {
+                                totalSkipped += skippedMatch.group(1) as Integer
                             }
                         }
                     }
