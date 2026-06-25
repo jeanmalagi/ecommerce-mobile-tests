@@ -585,15 +585,30 @@ services:
         always {
 
             script {
-                def resultFiles = findFiles(glob: 'test-results/*.xml')
+                def resultFiles = [
+                    'test-results/login-admin.xml',
+                    'test-results/login-cliente.xml',
+                    'test-results/login-invalido.xml',
+                    'test-results/register.xml',
+                    'test-results/browse-products.xml',
+                    'test-results/add-to-cart.xml',
+                    'test-results/remove-from-cart.xml',
+                    'test-results/checkout.xml'
+                ]
 
                 int totalTests = 0
                 int totalFailures = 0
                 int totalSkipped = 0
+                int parsedFiles = 0
 
                 resultFiles.each { file ->
+                    if (!fileExists(file)) {
+                        return
+                    }
+
                     try {
-                        def xml = new XmlSlurper().parseText(readFile(file.path))
+                        def xml = new XmlSlurper().parseText(readFile(file))
+                        parsedFiles++
 
                         if (xml.name() == 'testsuite') {
                             totalTests += (xml.@tests.text() ?: '0') as Integer
@@ -609,8 +624,12 @@ services:
                         }
                     }
                     catch (e) {
-                        echo "Aviso: nao foi possivel ler ${file.path}: ${e.message}"
+                        echo "Aviso: nao foi possivel ler ${file}: ${e.message}"
                     }
+                }
+
+                if (parsedFiles == 0) {
+                    echo 'Aviso: nenhum XML de resultado encontrado para montar o resumo.'
                 }
 
                 int totalPassed = totalTests - totalFailures - totalSkipped
