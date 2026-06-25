@@ -578,16 +578,21 @@ services:
             }
         }
 
-        stage('Publish Test Summary') {
-            steps {
-                script {
-                    def resultFiles = findFiles(glob: 'test-results/*.xml')
+    }
 
-                    int totalTests = 0
-                    int totalFailures = 0
-                    int totalSkipped = 0
+    post {
 
-                    resultFiles.each { file ->
+        always {
+
+            script {
+                def resultFiles = findFiles(glob: 'test-results/*.xml')
+
+                int totalTests = 0
+                int totalFailures = 0
+                int totalSkipped = 0
+
+                resultFiles.each { file ->
+                    try {
                         def xml = new XmlSlurper().parseText(readFile(file.path))
 
                         if (xml.name() == 'testsuite') {
@@ -603,25 +608,22 @@ services:
                             }
                         }
                     }
-
-                    int totalPassed = totalTests - totalFailures - totalSkipped
-                    def summary = "Tests: ${totalTests} | Passed: ${totalPassed} | Failed: ${totalFailures} | Skipped: ${totalSkipped}"
-
-                    currentBuild.description = summary
-                    writeFile file: 'test-results/summary.txt', text: summary + "\n"
-
-                    echo summary
+                    catch (e) {
+                        echo "Aviso: nao foi possivel ler ${file.path}: ${e.message}"
+                    }
                 }
 
-                archiveArtifacts artifacts: 'test-results/summary.txt',
-                                 allowEmptyArchive: true
+                int totalPassed = totalTests - totalFailures - totalSkipped
+                def summary = "Tests: ${totalTests} | Passed: ${totalPassed} | Failed: ${totalFailures} | Skipped: ${totalSkipped}"
+
+                currentBuild.description = summary
+                writeFile file: 'test-results/summary.txt', text: summary + "\n"
+
+                echo summary
             }
-        }
-    }
 
-    post {
-
-        always {
+            archiveArtifacts artifacts: 'test-results/summary.txt',
+                             allowEmptyArchive: true
 
             junit allowEmptyResults: true,
                   testResults: 'test-results/*.xml'
