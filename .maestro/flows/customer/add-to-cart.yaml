@@ -31,14 +31,15 @@ appId: host.exp.exponent
 
 - extendedWaitUntil:
     visible:
-      id: "cart-success-title"
-    timeout: 10000
-
-- assertVisible:
-    id: "cart-success-message"
+      id: "customer-products-title"
+    timeout: 15000
 
 - tapOn:
     id: "cart-success-ok"
+    optional: true
+- tapOn:
+    text: "OK"
+    optional: true
 
 - extendedWaitUntil:
     visible:

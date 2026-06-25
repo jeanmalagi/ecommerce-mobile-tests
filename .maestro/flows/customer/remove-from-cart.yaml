@@ -29,6 +29,11 @@ appId: host.exp.exponent
 - tapOn:
     id: "btn-add-to-cart"
 
+- extendedWaitUntil:
+    visible:
+      id: "customer-products-title"
+    timeout: 15000
+
 - tapOn:
     id: "cart-success-ok"
     optional: true
@@ -36,8 +41,15 @@ appId: host.exp.exponent
     text: "OK"
     optional: true
 
+- extendedWaitUntil:
+    visible: "Carrinho"
+    timeout: 15000
 - tapOn: "Carrinho"
-- assertVisible: "Carrinho"
+
+- extendedWaitUntil:
+    visible:
+      id: "cart-total"
+    timeout: 15000
 - waitForAnimationToEnd
 
 - tapOn:

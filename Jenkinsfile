@@ -610,26 +610,9 @@ services:
                         def content = readFile(file)
                         parsedFiles++
 
-                        def suiteTags = (content =~ /<testsuite\b[^>]*>/)
-
-                        suiteTags.each { match ->
-                            String suiteTag = match[0]
-
-                            def testsMatch = (suiteTag =~ /\btests="(\d+)"/)
-                            if (testsMatch.find()) {
-                                totalTests += testsMatch.group(1) as Integer
-                            }
-
-                            def failuresMatch = (suiteTag =~ /\bfailures="(\d+)"/)
-                            if (failuresMatch.find()) {
-                                totalFailures += failuresMatch.group(1) as Integer
-                            }
-
-                            def skippedMatch = (suiteTag =~ /\bskipped="(\d+)"/)
-                            if (skippedMatch.find()) {
-                                totalSkipped += skippedMatch.group(1) as Integer
-                            }
-                        }
+                        totalTests += ((content =~ /(?i)<testcase\b/).count)
+                        totalFailures += ((content =~ /(?i)<failure\b/).count)
+                        totalSkipped += ((content =~ /(?i)<skipped\b/).count)
                     }
                     catch (e) {
                         echo "Aviso: nao foi possivel ler ${file}: ${e.message}"
