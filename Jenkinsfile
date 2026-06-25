@@ -5,7 +5,7 @@ pipeline {
     environment {
         CI          = 'true'
         EXPO_URL    = 'exp://10.0.2.2:8081/--/'
-        API_URL     = 'http://192.168.1.100:3000'
+        API_URL     = 'http://10.0.2.2:3000/api'
         ANDROID_AVD = 'Small_Phone'
     }
 
@@ -127,7 +127,7 @@ pipeline {
                 bat '''
                 cd ecommerce-mobile-app
 
-                start "Expo" cmd /c "npx expo start --port 8081 --no-dev --minify > ../expo-server.log 2>&1"
+                start "Expo" cmd /c "set EXPO_PUBLIC_API_URL=%API_URL%&& npx expo start --port 8081 --no-dev --minify > ../expo-server.log 2>&1"
                 '''
 
                 bat '''
