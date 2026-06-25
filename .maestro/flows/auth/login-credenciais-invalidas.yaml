@@ -32,6 +32,10 @@ appId: host.exp.exponent
     text: "Entrar"
     optional: true
 
+- extendedWaitUntil:
+    visible: "Erro"
+    timeout: 15000
+
 - assertVisible: "Falha no login"
 
 - tapOn:
@@ -41,3 +45,8 @@ appId: host.exp.exponent
 - tapOn:
     text: "Ok"
     optional: true
+
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 15000
