@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Start Backend') {
+        stage('Prepare Test Environment') {
             steps {
 
                 dir('ecommerce-fullstack') {
@@ -86,11 +86,7 @@ services:
                     Pop-Location
                 }
                 '''
-            }
-        }
 
-        stage('Wait for API') {
-            steps {
                 powershell '''
                 $maxRetries = 20
 
@@ -115,11 +111,7 @@ services:
 
                 throw "API nao subiu"
                 '''
-            }
-        }
 
-        stage('Seed Test Users') {
-            steps {
                 powershell '''
                 $ErrorActionPreference = 'Stop'
 
@@ -163,11 +155,6 @@ services:
                     Pop-Location
                 }
                 '''
-            }
-        }
-
-        stage('Install App Dependencies') {
-            steps {
 
                 dir('ecommerce-mobile-app') {
 
@@ -179,7 +166,7 @@ services:
             }
         }
 
-        stage('Start Expo Server') {
+        stage('Prepare Mobile Runtime') {
             steps {
 
                 bat '''
@@ -230,11 +217,7 @@ services:
 
                 :end
                 '''
-            }
-        }
 
-        stage('Start Android Emulator') {
-            steps {
                 powershell '''
                 $ErrorActionPreference = 'Stop'
 
@@ -327,11 +310,7 @@ services:
 
                 throw "Emulador nao inicializou"
                 '''
-            }
-        }
 
-        stage('Install Expo Go') {
-            steps {
                 powershell '''
                 $ErrorActionPreference = 'Stop'
 
@@ -380,11 +359,7 @@ services:
 
                 Write-Host "Expo Go instalado"
                 '''
-            }
-        }
 
-        stage('Install Maestro CLI') {
-            steps {
                 powershell '''
                 $ErrorActionPreference = 'Stop'
 
@@ -469,62 +444,93 @@ services:
 
                 & $wrapperPath --version
                 '''
+
+                bat 'if not exist test-results mkdir test-results'
             }
         }
 
-        stage('Run Maestro Tests') {
+        stage('Flow - Login Admin') {
             steps {
-
-                bat 'if not exist test-results mkdir test-results'
-
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
                         bat '.\\maestro-local.cmd test .maestro/flows/auth/login-admin.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/login-admin.xml'
                     }
                 }
+            }
+        }
 
+        stage('Flow - Login Cliente') {
+            steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
                         bat '.\\maestro-local.cmd test .maestro/flows/auth/login-cliente.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/login-cliente.xml'
                     }
                 }
+            }
+        }
 
+        stage('Flow - Login Invalido') {
+            steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
                         bat '.\\maestro-local.cmd test .maestro/flows/auth/login-credenciais-invalidas.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/login-invalido.xml'
                     }
                 }
+            }
+        }
 
+        stage('Flow - Register') {
+            steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
                         bat '.\\maestro-local.cmd test .maestro/flows/auth/register.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/register.xml'
                     }
                 }
+            }
+        }
 
+        stage('Flow - Browse Products') {
+            steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
                         bat '.\\maestro-local.cmd test .maestro/flows/customer/browse-products.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/browse-products.xml'
                     }
                 }
+            }
+        }
 
+        stage('Flow - Add To Cart') {
+            steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
                         bat '.\\maestro-local.cmd test .maestro/flows/customer/add-to-cart.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/add-to-cart.xml'
                     }
                 }
+            }
+        }
 
+        stage('Flow - Remove From Cart') {
+            steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
                         bat '.\\maestro-local.cmd test .maestro/flows/customer/remove-from-cart.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/remove-from-cart.xml'
                     }
                 }
+            }
+        }
 
+        stage('Flow - Checkout') {
+            steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
                         bat '.\\maestro-local.cmd test .maestro/flows/customer/checkout.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/checkout.xml'
                     }
                 }
+            }
+        }
 
+        stage('Validate Maestro Results') {
+            steps {
                 powershell '''
                 $ErrorActionPreference = 'Stop'
 
