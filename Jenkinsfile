@@ -190,12 +190,16 @@ services:
                     echo Encerrando processo na porta 8081 ^(PID %%p^)...
                     taskkill /PID %%p /F >nul 2>&1
                 )
+
+                exit /b 0
                 '''
 
                 bat '''
                 cd ecommerce-mobile-app
 
                 start "Expo" cmd /c "set EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%&& echo EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL% > ../expo-server.log && npx expo start --clear --port 8081 --no-dev --minify >> ../expo-server.log 2>&1"
+
+                exit /b 0
                 '''
 
                 bat '''
@@ -592,7 +596,14 @@ services:
 
             bat '''
             cd ecommerce-fullstack
-            docker compose down -v
+
+            if errorlevel 1 (
+                echo Pasta ecommerce-fullstack nao encontrada no workspace, ignorando cleanup do Docker.
+                exit /b 0
+            )
+
+            docker compose down -v || echo Docker compose down retornou erro, seguindo cleanup.
+            exit /b 0
             '''
         }
 
