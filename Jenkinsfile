@@ -4,7 +4,7 @@ pipeline {
 
     environment {
         CI          = 'true'
-        EXPO_URL    = 'exp://192.168.1.100:8081'
+        EXPO_URL    = 'exp://10.0.2.2:8081/--/'
         API_URL     = 'http://192.168.1.100:3000'
         ANDROID_AVD = 'Small_Phone'
     }
@@ -403,51 +403,53 @@ pipeline {
         stage('Run Maestro Tests') {
             steps {
 
+                bat 'if not exist test-results mkdir test-results'
+
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-admin.yaml --format junit --output test-results/login-admin.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-admin.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/login-admin.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-cliente.yaml --format junit --output test-results/login-cliente.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-cliente.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/login-cliente.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-credenciais-invalidas.yaml --format junit --output test-results/login-invalido.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/auth/login-credenciais-invalidas.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/login-invalido.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat '.\\maestro-local.cmd test .maestro/flows/auth/register.yaml --format junit --output test-results/register.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/auth/register.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/register.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat '.\\maestro-local.cmd test .maestro/flows/customer/browse-products.yaml --format junit --output test-results/browse-products.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/customer/browse-products.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/browse-products.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat '.\\maestro-local.cmd test .maestro/flows/customer/add-to-cart.yaml --format junit --output test-results/add-to-cart.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/customer/add-to-cart.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/add-to-cart.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat '.\\maestro-local.cmd test .maestro/flows/customer/remove-from-cart.yaml --format junit --output test-results/remove-from-cart.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/customer/remove-from-cart.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/remove-from-cart.xml'
                     }
                 }
 
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     timeout(time: 4, unit: 'MINUTES') {
-                        bat '.\\maestro-local.cmd test .maestro/flows/customer/checkout.yaml --format junit --output test-results/checkout.xml'
+                        bat '.\\maestro-local.cmd test .maestro/flows/customer/checkout.yaml -e EXPO_URL=%EXPO_URL% --format junit --output test-results/checkout.xml'
                     }
                 }
 
