@@ -187,7 +187,7 @@ services:
                 setlocal EnableDelayedExpansion
 
                 for /f "tokens=5" %%p in ('netstat -ano ^| findstr ":8081" ^| findstr "LISTENING"') do (
-                    echo Encerrando processo na porta 8081 (PID %%p)...
+                    echo Encerrando processo na porta 8081 ^(PID %%p^)...
                     taskkill /PID %%p /F >nul 2>&1
                 )
                 '''
@@ -220,7 +220,7 @@ services:
                     exit /b 1
                 )
 
-                timeout /t 3 >nul
+                timeout /t 3 /nobreak >nul
 
                 goto loop
 
@@ -584,9 +584,10 @@ services:
 
             bat '''
             @echo off
-            for /f "tokens=1" %%i in ('adb devices ^| findstr /R "^emulator-[0-9][0-9][0-9][0-9][ ]*device"') do (
-                adb -s %%i emu kill
+            for /f "tokens=1" %%i in ('adb devices ^| findstr "emulator"') do (
+                adb -s %%i emu kill 2>nul
             )
+            exit /b 0
             '''
 
             bat '''
