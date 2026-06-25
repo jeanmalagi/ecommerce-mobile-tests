@@ -26,6 +26,32 @@ appId: host.exp.exponent
       id: "btn-add-to-cart"
     timeout: 15000
 
+- runFlow:
+    when:
+      visible: "Sem estoque"
+    commands:
+      - back
+      - tapOn:
+          id: "product-card"
+          index: 1
+      - extendedWaitUntil:
+          visible:
+            id: "btn-add-to-cart"
+          timeout: 15000
+
+- runFlow:
+    when:
+      visible: "Sem estoque"
+    commands:
+      - back
+      - tapOn:
+          id: "product-card"
+          index: 2
+      - extendedWaitUntil:
+          visible:
+            id: "btn-add-to-cart"
+          timeout: 15000
+
 - assertVisible: "Adicionar ao carrinho"
 
 - tapOn:
