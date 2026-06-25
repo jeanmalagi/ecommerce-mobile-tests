@@ -365,7 +365,10 @@ pipeline {
                 }
 
                 $wrapperPath = Join-Path $env:WORKSPACE 'maestro-local.cmd'
-                $wrapperContent = [string]::Format('@echo off`r`n"{0}" %*`r`n', $maestroBin)
+                $wrapperContent = @(
+                    '@echo off',
+                    ('"{0}" %*' -f $maestroBin)
+                )
                 Set-Content -Path $wrapperPath -Value $wrapperContent -Encoding ASCII
 
                 & $wrapperPath --version
@@ -423,6 +426,51 @@ pipeline {
                         bat '.\\maestro-local.cmd test .maestro/flows/customer/checkout.yaml --format junit --output test-results/checkout.xml'
                     }
                 }
+
+                powershell '''
+                $ErrorActionPreference = 'Stop'
+
+                $expectedFiles = @(
+                    'test-results/login-admin.xml',
+                    'test-results/login-cliente.xml',
+                    'test-results/login-invalido.xml',
+                    'test-results/register.xml',
+                    'test-results/browse-products.xml',
+                    'test-results/add-to-cart.xml',
+                    'test-results/remove-from-cart.xml',
+                    'test-results/checkout.xml'
+                )
+
+                $missingFiles = @($expectedFiles | Where-Object { -not (Test-Path $_) })
+                if ($missingFiles.Count -gt 0) {
+                    Write-Host 'Arquivos de resultado ausentes:'
+                    $missingFiles | ForEach-Object { Write-Host " - $_" }
+                    throw 'Nenhum ou alguns testes nao geraram JUnit XML. Falhando o stage para evitar falso positivo.'
+                }
+
+                $executedFiles = 0
+                foreach ($file in $expectedFiles) {
+                    [xml]$xmlDoc = Get-Content $file
+                    $tests = 0
+
+                    if ($xmlDoc.testsuite) {
+                        $tests = [int]$xmlDoc.testsuite.tests
+                    }
+                    elseif ($xmlDoc.testsuites -and $xmlDoc.testsuites.testsuite) {
+                        $tests = ($xmlDoc.testsuites.testsuite | Measure-Object -Property tests -Sum).Sum
+                    }
+
+                    if ($tests -gt 0) {
+                        $executedFiles++
+                    }
+                }
+
+                if ($executedFiles -eq 0) {
+                    throw 'Nenhum teste foi realmente executado (todos os XML com tests=0).'
+                }
+
+                Write-Host "Validacao JUnit OK: $executedFiles arquivo(s) com testes executados."
+                '''
             }
         }
     }
