@@ -584,52 +584,71 @@ services:
 
         always {
 
+            powershell '''
+            $ErrorActionPreference = 'Stop'
+
+            $resultFiles = @(
+                'test-results/login-admin.xml',
+                'test-results/login-cliente.xml',
+                'test-results/login-invalido.xml',
+                'test-results/register.xml',
+                'test-results/browse-products.xml',
+                'test-results/add-to-cart.xml',
+                'test-results/remove-from-cart.xml',
+                'test-results/checkout.xml'
+            )
+
+            $totalTests = 0
+            $totalFailures = 0
+            $totalSkipped = 0
+
+            foreach ($file in $resultFiles) {
+                if (-not (Test-Path $file)) {
+                    continue
+                }
+
+                try {
+                    [xml]$xmlDoc = Get-Content $file
+
+                    if ($xmlDoc.testsuite) {
+                        $totalTests += [int]$xmlDoc.testsuite.tests
+                        $totalFailures += [int]$xmlDoc.testsuite.failures
+                        if ($xmlDoc.testsuite.skipped) {
+                            $totalSkipped += [int]$xmlDoc.testsuite.skipped
+                        }
+                    }
+                    elseif ($xmlDoc.testsuites -and $xmlDoc.testsuites.testsuite) {
+                        foreach ($suite in $xmlDoc.testsuites.testsuite) {
+                            $totalTests += [int]$suite.tests
+                            $totalFailures += [int]$suite.failures
+                            if ($suite.skipped) {
+                                $totalSkipped += [int]$suite.skipped
+                            }
+                        }
+                    }
+                }
+                catch {
+                    Write-Host "Aviso: nao foi possivel ler $file: $($_.Exception.Message)"
+                }
+            }
+
+            $totalPassed = $totalTests - $totalFailures - $totalSkipped
+            $summary = "Tests: $totalTests | Passed: $totalPassed | Failed: $totalFailures | Skipped: $totalSkipped"
+
+            if (-not (Test-Path 'test-results')) {
+                New-Item -ItemType Directory -Path 'test-results' -Force | Out-Null
+            }
+
+            Set-Content -Path 'test-results/summary.txt' -Value $summary -Encoding ASCII
+            Write-Host $summary
+            '''
+
             script {
-                def resultFiles = [
-                    'test-results/login-admin.xml',
-                    'test-results/login-cliente.xml',
-                    'test-results/login-invalido.xml',
-                    'test-results/register.xml',
-                    'test-results/browse-products.xml',
-                    'test-results/add-to-cart.xml',
-                    'test-results/remove-from-cart.xml',
-                    'test-results/checkout.xml'
-                ]
-
-                int totalTests = 0
-                int totalFailures = 0
-                int totalSkipped = 0
-                int parsedFiles = 0
-
-                resultFiles.each { file ->
-                    if (!fileExists(file)) {
-                        return
-                    }
-
-                    try {
-                        def content = readFile(file)
-                        parsedFiles++
-
-                        totalTests += ((content =~ /(?i)<testcase\b/).count)
-                        totalFailures += ((content =~ /(?i)<failure\b/).count)
-                        totalSkipped += ((content =~ /(?i)<skipped\b/).count)
-                    }
-                    catch (e) {
-                        echo "Aviso: nao foi possivel ler ${file}: ${e.message}"
-                    }
+                if (fileExists('test-results/summary.txt')) {
+                    def summary = readFile('test-results/summary.txt').trim()
+                    currentBuild.description = summary
+                    echo summary
                 }
-
-                if (parsedFiles == 0) {
-                    echo 'Aviso: nenhum XML de resultado encontrado para montar o resumo.'
-                }
-
-                int totalPassed = totalTests - totalFailures - totalSkipped
-                def summary = "Tests: ${totalTests} | Passed: ${totalPassed} | Failed: ${totalFailures} | Skipped: ${totalSkipped}"
-
-                currentBuild.description = summary
-                writeFile file: 'test-results/summary.txt', text: summary + "\n"
-
-                echo summary
             }
 
             archiveArtifacts artifacts: 'test-results/summary.txt',

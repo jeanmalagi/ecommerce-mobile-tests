@@ -26,13 +26,18 @@ appId: host.exp.exponent
       id: "btn-add-to-cart"
     timeout: 15000
 
+- assertVisible: "Adicionar ao carrinho"
+
 - tapOn:
     id: "btn-add-to-cart"
 
 - extendedWaitUntil:
     visible:
-      id: "customer-products-title"
-    timeout: 15000
+      id: "cart-success-title"
+    timeout: 20000
+
+- assertVisible:
+    id: "cart-success-message"
 
 - tapOn:
     id: "cart-success-ok"
@@ -44,4 +49,4 @@ appId: host.exp.exponent
 - extendedWaitUntil:
     visible:
       id: "customer-products-title"
-    timeout: 15000
+    timeout: 30000
