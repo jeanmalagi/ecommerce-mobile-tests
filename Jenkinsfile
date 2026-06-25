@@ -327,41 +327,65 @@ pipeline {
                     Write-Host "Usando Maestro global: $maestroBin"
                 }
                 else {
-                    $toolsDir = Join-Path $env:WORKSPACE '.tools'
-                    $maestroDir = Join-Path $toolsDir 'maestro'
-                    $maestroZip = Join-Path $toolsDir 'maestro.zip'
+                    $cacheRoot = if ($env:JENKINS_HOME) { Join-Path $env:JENKINS_HOME 'cache/maestro-cli' } else { Join-Path $env:WORKSPACE '.tools/maestro-cache' }
+                    $maestroDir = Join-Path $cacheRoot 'maestro'
+                    $maestroZip = Join-Path $cacheRoot 'maestro.zip'
 
-                    New-Item -ItemType Directory -Path $toolsDir -Force | Out-Null
+                    New-Item -ItemType Directory -Path $cacheRoot -Force | Out-Null
 
-                    Write-Host "Baixando Maestro CLI para o workspace..."
-                    Invoke-WebRequest -Uri 'https://github.com/mobile-dev-inc/maestro/releases/latest/download/maestro.zip' -OutFile $maestroZip -UseBasicParsing
+                    function Find-MaestroBin {
+                        param([string]$Root)
 
-                    if (Test-Path $maestroDir) {
-                        Remove-Item -Path $maestroDir -Recurse -Force
-                    }
+                        $candidateNames = @('maestro.bat', 'maestro.cmd', 'maestro.exe', 'maestro')
+                        $candidates = Get-ChildItem -Path $Root -Recurse -File -ErrorAction SilentlyContinue |
+                            Where-Object { $candidateNames -contains $_.Name } |
+                            Sort-Object FullName
 
-                    Expand-Archive -Path $maestroZip -DestinationPath $maestroDir -Force
-
-                    $candidateNames = @('maestro.bat', 'maestro.cmd', 'maestro.exe', 'maestro')
-                    $maestroCandidates = Get-ChildItem -Path $maestroDir -Recurse -File -ErrorAction SilentlyContinue |
-                        Where-Object { $candidateNames -contains $_.Name } |
-                        Sort-Object FullName
-
-                    if ($maestroCandidates.Count -gt 0) {
-                        $preferred = $maestroCandidates | Where-Object { $_.Name -eq 'maestro.bat' } | Select-Object -First 1
-                        if (-not $preferred) {
-                            $preferred = $maestroCandidates | Select-Object -First 1
+                        if ($candidates.Count -eq 0) {
+                            return $null
                         }
-                        $maestroBin = $preferred.FullName
+
+                        $preferred = $candidates | Where-Object { $_.Name -eq 'maestro.bat' } | Select-Object -First 1
+                        if (-not $preferred) {
+                            $preferred = $candidates | Select-Object -First 1
+                        }
+
+                        return $preferred.FullName
                     }
 
-                    if (-not $maestroBin) {
-                        Write-Host "Conteudo extraido em $maestroDir (amostra):"
-                        Get-ChildItem -Path $maestroDir -Recurse -File | Select-Object -First 20 FullName | Format-Table -AutoSize | Out-Host
-                        throw "Nao foi possivel localizar o executavel do Maestro apos extrair maestro.zip."
+                    $maestroBin = Find-MaestroBin -Root $maestroDir
+
+                    $cacheValid = $false
+                    if ($maestroBin) {
+                        try {
+                            & $maestroBin --version | Out-Host
+                            $cacheValid = $true
+                            Write-Host "Reutilizando Maestro em cache: $maestroBin"
+                        }
+                        catch {
+                            Write-Host "Cache do Maestro invalido; reinstalando..."
+                        }
                     }
 
-                    Write-Host "Maestro local instalado em: $maestroBin"
+                    if (-not $cacheValid) {
+                        Write-Host "Baixando Maestro CLI para cache..."
+                        Invoke-WebRequest -Uri 'https://github.com/mobile-dev-inc/maestro/releases/latest/download/maestro.zip' -OutFile $maestroZip -UseBasicParsing
+
+                        if (Test-Path $maestroDir) {
+                            Remove-Item -Path $maestroDir -Recurse -Force
+                        }
+
+                        Expand-Archive -Path $maestroZip -DestinationPath $maestroDir -Force
+                        $maestroBin = Find-MaestroBin -Root $maestroDir
+
+                        if (-not $maestroBin) {
+                            Write-Host "Conteudo extraido em $maestroDir (amostra):"
+                            Get-ChildItem -Path $maestroDir -Recurse -File | Select-Object -First 20 FullName | Format-Table -AutoSize | Out-Host
+                            throw "Nao foi possivel localizar o executavel do Maestro apos extrair maestro.zip."
+                        }
+
+                        Write-Host "Maestro local instalado em: $maestroBin"
+                    }
                 }
 
                 $wrapperPath = Join-Path $env:WORKSPACE 'maestro-local.cmd'
