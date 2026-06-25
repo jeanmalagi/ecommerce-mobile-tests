@@ -628,7 +628,7 @@ services:
                     }
                 }
                 catch {
-                    Write-Host "Aviso: nao foi possivel ler $file: $($_.Exception.Message)"
+                    Write-Host "Aviso: nao foi possivel ler ${file}: $($_.Exception.Message)"
                 }
             }
 
