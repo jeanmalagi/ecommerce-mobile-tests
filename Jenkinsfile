@@ -3,10 +3,11 @@ pipeline {
     agent any
 
     environment {
-        CI          = 'true'
-        EXPO_URL    = 'exp://10.0.2.2:8081/--/'
-        API_URL     = 'http://10.0.2.2:3000/api'
-        ANDROID_AVD = 'Small_Phone'
+        CI                  = 'true'
+        EXPO_URL            = 'exp://10.0.2.2:8081/--/'
+        API_URL             = 'http://10.0.2.2:3000/api'
+        EXPO_PUBLIC_API_URL = 'http://10.0.2.2:3000/api'
+        ANDROID_AVD         = 'Small_Phone'
     }
 
     options {
@@ -136,12 +137,7 @@ services:
                     } | ConvertTo-Json
 
                     try {
-                        Invoke-RestMethod \
-                            -Method Post \
-                            -Uri 'http://localhost:3000/api/users/register' \
-                            -ContentType 'application/json' \
-                            -Body $payload \
-                            -TimeoutSec 10 | Out-Null
+                        Invoke-RestMethod -Method Post -Uri 'http://localhost:3000/api/users/register' -ContentType 'application/json' -Body $payload -TimeoutSec 10 | Out-Null
 
                         Write-Host "Usuario criado: $Email"
                     }
@@ -187,9 +183,19 @@ services:
             steps {
 
                 bat '''
+                @echo off
+                setlocal EnableDelayedExpansion
+
+                for /f "tokens=5" %%p in ('netstat -ano ^| findstr ":8081" ^| findstr "LISTENING"') do (
+                    echo Encerrando processo na porta 8081 (PID %%p)...
+                    taskkill /PID %%p /F >nul 2>&1
+                )
+                '''
+
+                bat '''
                 cd ecommerce-mobile-app
 
-                start "Expo" cmd /c "set EXPO_PUBLIC_API_URL=%API_URL%&& npx expo start --port 8081 --no-dev --minify > ../expo-server.log 2>&1"
+                start "Expo" cmd /c "set EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%&& echo EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL% > ../expo-server.log && npx expo start --clear --port 8081 --no-dev --minify >> ../expo-server.log 2>&1"
                 '''
 
                 bat '''
@@ -577,7 +583,10 @@ services:
                              allowEmptyArchive: true
 
             bat '''
-            adb emu kill
+            @echo off
+            for /f "tokens=1" %%i in ('adb devices ^| findstr /R "^emulator-[0-9][0-9][0-9][0-9][ ]*device"') do (
+                adb -s %%i emu kill
+            )
             '''
 
             bat '''
