@@ -578,6 +578,124 @@ services:
             }
         }
 
+        stage('Generate Allure Results') {
+            steps {
+                powershell '''
+                $ErrorActionPreference = 'Stop'
+
+                if (-not (Test-Path 'allure-results')) {
+                    New-Item -ItemType Directory -Path 'allure-results' -Force | Out-Null
+                }
+
+                Get-ChildItem -Path 'allure-results' -File -Filter '*-result.json' -ErrorAction SilentlyContinue |
+                    Remove-Item -Force -ErrorAction SilentlyContinue
+
+                $xmlFiles = Get-ChildItem -Path 'test-results' -Filter '*.xml' -File -ErrorAction SilentlyContinue
+                if (-not $xmlFiles -or $xmlFiles.Count -eq 0) {
+                    throw 'Nenhum arquivo JUnit XML encontrado para conversao em Allure.'
+                }
+
+                $nowMs = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+
+                foreach ($xmlFile in $xmlFiles) {
+                    [xml]$xmlDoc = Get-Content $xmlFile.FullName
+
+                    $suites = @()
+                    if ($xmlDoc.testsuite) {
+                        $suites += $xmlDoc.testsuite
+                    }
+                    elseif ($xmlDoc.testsuites -and $xmlDoc.testsuites.testsuite) {
+                        $suites += $xmlDoc.testsuites.testsuite
+                    }
+
+                    foreach ($suite in $suites) {
+                        $suiteName = if ($suite.name) { [string]$suite.name } else { $xmlFile.BaseName }
+
+                        $testCases = @($suite.testcase)
+                        foreach ($testCase in $testCases) {
+                            if (-not $testCase) {
+                                continue
+                            }
+
+                            $testName = if ($testCase.name) { [string]$testCase.name } else { 'Unnamed test' }
+                            $className = if ($testCase.classname) { [string]$testCase.classname } else { $suiteName }
+
+                            $status = 'passed'
+                            $statusMessage = $null
+                            $statusTrace = $null
+
+                            if ($testCase.failure) {
+                                $status = 'failed'
+                                $statusMessage = [string]$testCase.failure.message
+                                $statusTrace = [string]$testCase.failure.'#text'
+                            }
+                            elseif ($testCase.error) {
+                                $status = 'broken'
+                                $statusMessage = [string]$testCase.error.message
+                                $statusTrace = [string]$testCase.error.'#text'
+                            }
+                            elseif ($testCase.skipped) {
+                                $status = 'skipped'
+                            }
+
+                            $durationMs = 0
+                            if ($testCase.time) {
+                                $durationMs = [int]([double]$testCase.time * 1000)
+                            }
+
+                            $startTime = $nowMs
+                            $stopTime = $nowMs + [Math]::Max($durationMs, 1)
+                            $nowMs = $stopTime + 1
+
+                            $uuid = [Guid]::NewGuid().ToString()
+                            $result = [ordered]@{
+                                uuid = $uuid
+                                name = $testName
+                                fullName = "$className.$testName"
+                                status = $status
+                                stage = 'finished'
+                                start = $startTime
+                                stop = $stopTime
+                                labels = @(
+                                    @{ name = 'framework'; value = 'junit' },
+                                    @{ name = 'language'; value = 'powershell' },
+                                    @{ name = 'suite'; value = $suiteName }
+                                )
+                            }
+
+                            if ($statusMessage -or $statusTrace) {
+                                $result.statusDetails = @{
+                                    message = $statusMessage
+                                    trace = $statusTrace
+                                }
+                            }
+
+                            $json = $result | ConvertTo-Json -Depth 10
+                            $targetFile = Join-Path 'allure-results' "$uuid-result.json"
+                            Set-Content -Path $targetFile -Value $json -Encoding UTF8
+                        }
+                    }
+                }
+
+                $resultCount = @(Get-ChildItem -Path 'allure-results' -File -Filter '*-result.json').Count
+                if ($resultCount -eq 0) {
+                    throw 'Conversao para Allure nao gerou resultados.'
+                }
+
+                Write-Host "Allure results gerados: $resultCount"
+
+                $allureCmd = Get-Command allure -ErrorAction SilentlyContinue
+                if ($allureCmd) {
+                    Write-Host "Gerando relatorio HTML local com Allure CLI..."
+                    & $allureCmd.Source generate allure-results --clean -o allure-report | Out-Host
+                }
+                else {
+                    Write-Host 'Allure CLI nao encontrado no agente. O Jenkins Allure Plugin pode gerar o report a partir de allure-results.'
+                }
+                '''
+            }
+        }
+
     }
 
     post {
@@ -656,6 +774,27 @@ services:
 
             junit allowEmptyResults: true,
                   testResults: 'test-results/*.xml'
+
+            archiveArtifacts artifacts: 'allure-results/**/*',
+                             allowEmptyArchive: true
+
+            archiveArtifacts artifacts: 'allure-report/**/*',
+                             allowEmptyArchive: true
+
+            script {
+                if (fileExists('allure-results')) {
+                    try {
+                        allure includeProperties: false,
+                               results: [[path: 'allure-results']]
+                    }
+                    catch (MissingMethodException ex) {
+                        echo 'Allure Plugin nao encontrado no Jenkins. Resultados foram arquivados em allure-results.'
+                    }
+                    catch (Exception ex) {
+                        echo "Falha ao publicar Allure: ${ex.getMessage()}"
+                    }
+                }
+            }
 
             archiveArtifacts artifacts: '.maestro/debug*/**/*',
                              allowEmptyArchive: true
