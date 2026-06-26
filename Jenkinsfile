@@ -240,8 +240,24 @@ services:
                         [switch]$IgnoreExitCode
                     )
 
-                    $output = & adb @Arguments 2>&1
-                    $exitCode = $LASTEXITCODE
+                    $previousErrorActionPreference = $ErrorActionPreference
+                    $hasNativeCommandPreference = Test-Path variable:PSNativeCommandUseErrorActionPreference
+                    if ($hasNativeCommandPreference) {
+                        $previousNativeCommandPreference = $PSNativeCommandUseErrorActionPreference
+                        $PSNativeCommandUseErrorActionPreference = $false
+                    }
+
+                    $ErrorActionPreference = 'Continue'
+                    try {
+                        $output = & adb @Arguments 2>&1
+                        $exitCode = $LASTEXITCODE
+                    }
+                    finally {
+                        $ErrorActionPreference = $previousErrorActionPreference
+                        if ($hasNativeCommandPreference) {
+                            $PSNativeCommandUseErrorActionPreference = $previousNativeCommandPreference
+                        }
+                    }
 
                     if (-not $IgnoreExitCode -and $exitCode -ne 0) {
                         $joinedOutput = ($output | ForEach-Object { $_.ToString() }) -join "`n"
