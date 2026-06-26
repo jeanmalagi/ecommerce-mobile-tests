@@ -246,26 +246,43 @@ services:
                     param(
                         [Parameter(Mandatory = $true)]
                         [string[]]$Arguments,
-                        [switch]$IgnoreExitCode
+                        [switch]$IgnoreExitCode,
+                        [int]$TimeoutSeconds = 30
                     )
 
-                    $previousErrorActionPreference = $ErrorActionPreference
-                    $hasNativeCommandPreference = Test-Path variable:PSNativeCommandUseErrorActionPreference
-                    if ($hasNativeCommandPreference) {
-                        $previousNativeCommandPreference = $PSNativeCommandUseErrorActionPreference
-                        $PSNativeCommandUseErrorActionPreference = $false
-                    }
+                    $adbCommand = Get-Command adb -ErrorAction Stop
+                    $stdoutFile = [System.IO.Path]::GetTempFileName()
+                    $stderrFile = [System.IO.Path]::GetTempFileName()
 
-                    $ErrorActionPreference = 'Continue'
                     try {
-                        $output = & adb @Arguments 2>&1
-                        $exitCode = $LASTEXITCODE
+                        $process = Start-Process -FilePath $adbCommand.Source -ArgumentList $Arguments -PassThru -NoNewWindow -RedirectStandardOutput $stdoutFile -RedirectStandardError $stderrFile
+
+                        if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
+                            try {
+                                $process.Kill()
+                            }
+                            catch {
+                            }
+
+                            throw "adb $($Arguments -join ' ') excedeu o timeout de ${TimeoutSeconds}s"
+                        }
+
+                        $stdout = @()
+                        $stderr = @()
+
+                        if (Test-Path $stdoutFile) {
+                            $stdout = @(Get-Content -Path $stdoutFile -ErrorAction SilentlyContinue)
+                        }
+
+                        if (Test-Path $stderrFile) {
+                            $stderr = @(Get-Content -Path $stderrFile -ErrorAction SilentlyContinue)
+                        }
+
+                        $output = @($stdout + $stderr)
+                        $exitCode = $process.ExitCode
                     }
                     finally {
-                        $ErrorActionPreference = $previousErrorActionPreference
-                        if ($hasNativeCommandPreference) {
-                            $PSNativeCommandUseErrorActionPreference = $previousNativeCommandPreference
-                        }
+                        Remove-Item -Path $stdoutFile, $stderrFile -Force -ErrorAction SilentlyContinue
                     }
 
                     if (-not $IgnoreExitCode -and $exitCode -ne 0) {
@@ -413,26 +430,43 @@ services:
                     param(
                         [Parameter(Mandatory = $true)]
                         [string[]]$Arguments,
-                        [switch]$IgnoreExitCode
+                        [switch]$IgnoreExitCode,
+                        [int]$TimeoutSeconds = 30
                     )
 
-                    $previousErrorActionPreference = $ErrorActionPreference
-                    $hasNativeCommandPreference = Test-Path variable:PSNativeCommandUseErrorActionPreference
-                    if ($hasNativeCommandPreference) {
-                        $previousNativeCommandPreference = $PSNativeCommandUseErrorActionPreference
-                        $PSNativeCommandUseErrorActionPreference = $false
-                    }
+                    $adbCommand = Get-Command adb -ErrorAction Stop
+                    $stdoutFile = [System.IO.Path]::GetTempFileName()
+                    $stderrFile = [System.IO.Path]::GetTempFileName()
 
-                    $ErrorActionPreference = 'Continue'
                     try {
-                        $output = & adb @Arguments 2>&1
-                        $exitCode = $LASTEXITCODE
+                        $process = Start-Process -FilePath $adbCommand.Source -ArgumentList $Arguments -PassThru -NoNewWindow -RedirectStandardOutput $stdoutFile -RedirectStandardError $stderrFile
+
+                        if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
+                            try {
+                                $process.Kill()
+                            }
+                            catch {
+                            }
+
+                            throw "adb $($Arguments -join ' ') excedeu o timeout de ${TimeoutSeconds}s"
+                        }
+
+                        $stdout = @()
+                        $stderr = @()
+
+                        if (Test-Path $stdoutFile) {
+                            $stdout = @(Get-Content -Path $stdoutFile -ErrorAction SilentlyContinue)
+                        }
+
+                        if (Test-Path $stderrFile) {
+                            $stderr = @(Get-Content -Path $stderrFile -ErrorAction SilentlyContinue)
+                        }
+
+                        $output = @($stdout + $stderr)
+                        $exitCode = $process.ExitCode
                     }
                     finally {
-                        $ErrorActionPreference = $previousErrorActionPreference
-                        if ($hasNativeCommandPreference) {
-                            $PSNativeCommandUseErrorActionPreference = $previousNativeCommandPreference
-                        }
+                        Remove-Item -Path $stdoutFile, $stderrFile -Force -ErrorAction SilentlyContinue
                     }
 
                     if (-not $IgnoreExitCode -and $exitCode -ne 0) {
