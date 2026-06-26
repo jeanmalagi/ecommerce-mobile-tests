@@ -8,6 +8,7 @@ pipeline {
         API_URL             = 'http://10.0.2.2:3000/api'
         EXPO_PUBLIC_API_URL = 'http://10.0.2.2:3000/api'
         ANDROID_AVD         = 'Small_Phone'
+        KEEP_EMULATOR_WARM  = 'true'
     }
 
     options {
@@ -349,22 +350,43 @@ services:
                 Write-Host "=========================================="
 
                 Restart-AdbServer
-
-                Start-Process -FilePath "emulator" -ArgumentList @(
-                    "-avd", $avdToStart,
-                    "-no-snapshot-load",
-                    "-no-audio",
-                    "-no-boot-anim",
-                    "-no-window",
-                    "-gpu", "swiftshader_indirect"
-                ) | Out-Null
-
-                Start-Sleep -Seconds 8
-
                 $emuSerial = $null
-                for ($attempt = 1; $attempt -le 12; $attempt++) {
+
+                try {
+                    $existingDeviceLines = @(Invoke-Adb -Arguments @('devices') -IgnoreExitCode |
+                        Select-Object -Skip 1 |
+                        ForEach-Object { $_.ToString().Trim() } |
+                        Where-Object { $_ })
+
+                    $existingEmulators = @($existingDeviceLines | Where-Object { $_.StartsWith('emulator-') -and $_.EndsWith('device') })
+                    if ($existingEmulators.Count -gt 0) {
+                        $normalizedLine = $existingEmulators[0].Replace("`t", " ")
+                        $emuSerial = $normalizedLine.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
+                        Write-Host "Reutilizando emulador ja online: $emuSerial"
+                    }
+                }
+                catch {
+                    Write-Host "Nao foi possivel verificar emulador existente: $($_.Exception.Message)"
+                }
+
+                if (-not $emuSerial) {
+                    Start-Process -FilePath "emulator" -ArgumentList @(
+                        "-avd", $avdToStart,
+                        "-no-audio",
+                        "-no-boot-anim",
+                        "-no-window",
+                        "-gpu", "swiftshader_indirect"
+                    ) | Out-Null
+
+                    Start-Sleep -Seconds 8
+                }
+
+                $detectAttempts = if ($emuSerial) { 1 } else { 12 }
+                for ($attempt = 1; $attempt -le $detectAttempts; $attempt++) {
                     try {
-                        Write-Host "Aguardando emulador no adb (tentativa $attempt/12)..."
+                        if (-not $emuSerial) {
+                            Write-Host "Aguardando emulador no adb (tentativa $attempt/$detectAttempts)..."
+                        }
 
                         $deviceLines = @(Invoke-Adb -Arguments @('devices') -IgnoreExitCode |
                             Select-Object -Skip 1 |
@@ -380,21 +402,25 @@ services:
                             break
                         }
 
-                        Write-Host 'Nenhum emulador online ainda no adb devices.'
+                        if (-not $emuSerial) {
+                            Write-Host 'Nenhum emulador online ainda no adb devices.'
+                        }
                     }
                     catch {
                         Write-Host "Falha ao listar adb devices: $($_.Exception.Message)"
                     }
 
-                    if (($attempt % 3) -eq 0) {
+                    if (-not $emuSerial -and ($attempt % 3) -eq 0) {
                         Restart-AdbServer
                     }
 
-                    Start-Sleep -Seconds 5
+                    if (-not $emuSerial) {
+                        Start-Sleep -Seconds 5
+                    }
                 }
 
                 if (-not $emuSerial) {
-                    throw "Nao foi possivel detectar emulador online no adb apos 12 tentativas."
+                    throw "Nao foi possivel detectar emulador online no adb apos $detectAttempts tentativas."
                 }
 
                 $maxRetries = 60
@@ -1001,11 +1027,8 @@ services:
                         allure includeProperties: false,
                                results: [[path: 'allure-results']]
                     }
-                    catch (MissingMethodException ex) {
+                    catch (Throwable ex) {
                         echo 'Allure Plugin nao encontrado no Jenkins. Resultados foram arquivados em allure-results.'
-                    }
-                    catch (Exception ex) {
-                        echo "Falha ao publicar Allure: ${ex.getMessage()}"
                     }
                 }
             }
@@ -1018,6 +1041,11 @@ services:
 
             bat '''
             @echo off
+            if /I "%KEEP_EMULATOR_WARM%"=="true" (
+                echo KEEP_EMULATOR_WARM=true, mantendo emulador ativo para acelerar o proximo build.
+                exit /b 0
+            )
+
             for /f "tokens=1" %%i in ('adb devices ^| findstr "emulator"') do (
                 adb -s %%i emu kill 2>nul
             )
