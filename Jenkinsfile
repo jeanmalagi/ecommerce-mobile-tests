@@ -751,14 +751,66 @@ services:
 
                 Write-Host "Allure results gerados: $resultCount"
 
-                $allureCmd = Get-Command allure -ErrorAction SilentlyContinue
-                if ($allureCmd) {
-                    Write-Host "Gerando relatorio HTML local com Allure CLI..."
-                    & $allureCmd.Source generate allure-results --clean -o allure-report | Out-Host
+                $allureExecutable = $null
+                $systemAllure = Get-Command allure -ErrorAction SilentlyContinue
+
+                if ($systemAllure) {
+                    $allureExecutable = $systemAllure.Source
+                    Write-Host "Usando Allure CLI global: $allureExecutable"
                 }
                 else {
-                    Write-Host 'Allure CLI nao encontrado no agente. O Jenkins Allure Plugin pode gerar o report a partir de allure-results.'
+                    $allureVersion = '2.29.0'
+                    $cacheRoot = if ($env:JENKINS_HOME) { Join-Path $env:JENKINS_HOME 'cache/allure-cli' } else { Join-Path $env:WORKSPACE '.tools/allure-cache' }
+                    $allureZip = Join-Path $cacheRoot "allure-commandline-$allureVersion.zip"
+                    $allureHome = Join-Path $cacheRoot "allure-$allureVersion"
+                    $allureBin = Join-Path $allureHome 'bin/allure.bat'
+
+                    New-Item -ItemType Directory -Path $cacheRoot -Force | Out-Null
+
+                    $cacheValid = $false
+                    if (Test-Path $allureBin) {
+                        try {
+                            & $allureBin --version | Out-Host
+                            $cacheValid = $true
+                            Write-Host "Reutilizando Allure CLI em cache: $allureBin"
+                        }
+                        catch {
+                            Write-Host 'Cache do Allure invalido; reinstalando...'
+                        }
+                    }
+
+                    if (-not $cacheValid) {
+                        Write-Host "Baixando Allure CLI $allureVersion..."
+                        Invoke-WebRequest -Uri "https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/$allureVersion/allure-commandline-$allureVersion.zip" -OutFile $allureZip -UseBasicParsing
+
+                        if (Test-Path $allureHome) {
+                            Remove-Item -Path $allureHome -Recurse -Force
+                        }
+
+                        Expand-Archive -Path $allureZip -DestinationPath $cacheRoot -Force
+
+                        if (-not (Test-Path $allureBin)) {
+                            throw "Nao foi possivel localizar o Allure CLI em $allureBin apos extracao."
+                        }
+
+                        & $allureBin --version | Out-Host
+                    }
+
+                    $allureExecutable = $allureBin
                 }
+
+                if (Test-Path 'allure-report') {
+                    Remove-Item -Path 'allure-report' -Recurse -Force
+                }
+
+                Write-Host "Gerando relatorio HTML local em allure-report..."
+                & $allureExecutable generate allure-results --clean -o allure-report | Out-Host
+
+                if (-not (Test-Path 'allure-report/index.html')) {
+                    throw 'Allure report nao gerou allure-report/index.html.'
+                }
+
+                Write-Host 'Allure HTML pronto: allure-report/index.html'
                 '''
             }
         }
