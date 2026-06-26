@@ -3,3 +3,13 @@ appId: host.exp.exponent
 ---
 
 - openLink: ${EXPO_URL}
+
+- runFlow:
+    when:
+      visible: "Enter URL manually"
+    file: ./open-project-via-url.yaml
+
+- extendedWaitUntil:
+    visible:
+      id: "input-email"
+    timeout: 60000

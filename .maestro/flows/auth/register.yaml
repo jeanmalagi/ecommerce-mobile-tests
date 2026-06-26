@@ -9,7 +9,7 @@ appId: host.exp.exponent
 
 - extendedWaitUntil:
     visible: "Bem-vindo de volta"
-    timeout: 30000
+    timeout: 60000
 
 - assertVisible: "Bem-vindo de volta"
 - tapOn:
