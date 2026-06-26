@@ -167,6 +167,9 @@ services:
         }
 
         stage('Prepare Mobile Runtime') {
+            options {
+                timeout(time: 25, unit: 'MINUTES')
+            }
             steps {
 
                 bat '''
@@ -476,7 +479,7 @@ services:
                 if (-not $hasExpoGo) {
                     Write-Host "Baixando Expo Go..."
                     $apkPath = Join-Path $PWD 'expo-go.apk'
-                    Invoke-WebRequest -Uri 'https://d1ahtucjixef4r.cloudfront.net/Exponent-2.31.3.apk' -OutFile $apkPath -UseBasicParsing
+                    Invoke-WebRequest -Uri 'https://d1ahtucjixef4r.cloudfront.net/Exponent-2.31.3.apk' -OutFile $apkPath -UseBasicParsing -TimeoutSec 120
 
                     Write-Host "Instalando Expo Go no emulador..."
                     Invoke-Adb -Arguments @('-s', $emuSerial, 'install', '-r', $apkPath) -IgnoreExitCode | Out-Host
@@ -541,7 +544,7 @@ services:
 
                     if (-not $cacheValid) {
                         Write-Host "Baixando Maestro CLI para cache..."
-                        Invoke-WebRequest -Uri 'https://github.com/mobile-dev-inc/maestro/releases/latest/download/maestro.zip' -OutFile $maestroZip -UseBasicParsing
+                        Invoke-WebRequest -Uri 'https://github.com/mobile-dev-inc/maestro/releases/latest/download/maestro.zip' -OutFile $maestroZip -UseBasicParsing -TimeoutSec 180
 
                         if (Test-Path $maestroDir) {
                             Remove-Item -Path $maestroDir -Recurse -Force
@@ -839,7 +842,7 @@ services:
 
                     if (-not $cacheValid) {
                         Write-Host "Baixando Allure CLI $allureVersion..."
-                        Invoke-WebRequest -Uri "https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/$allureVersion/allure-commandline-$allureVersion.zip" -OutFile $allureZip -UseBasicParsing
+                        Invoke-WebRequest -Uri "https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/$allureVersion/allure-commandline-$allureVersion.zip" -OutFile $allureZip -UseBasicParsing -TimeoutSec 180
 
                         if (Test-Path $allureHome) {
                             Remove-Item -Path $allureHome -Recurse -Force
