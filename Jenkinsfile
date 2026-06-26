@@ -233,6 +233,30 @@ services:
                 Write-Host "emulator:"
                 where.exe emulator
 
+                function Invoke-Adb {
+                    param(
+                        [Parameter(Mandatory = $true)]
+                        [string[]]$Arguments,
+                        [switch]$IgnoreExitCode
+                    )
+
+                    $output = & adb @Arguments 2>&1
+                    $exitCode = $LASTEXITCODE
+
+                    if (-not $IgnoreExitCode -and $exitCode -ne 0) {
+                        $joinedOutput = ($output | ForEach-Object { $_.ToString() }) -join "`n"
+                        throw "adb $($Arguments -join ' ') falhou (exit=$exitCode): $joinedOutput"
+                    }
+
+                    return $output
+                }
+
+                function Restart-AdbServer {
+                    Invoke-Adb -Arguments @('kill-server') -IgnoreExitCode | Out-Null
+                    Start-Sleep -Seconds 2
+                    Invoke-Adb -Arguments @('start-server') | Out-Null
+                }
+
                 $emulatorCommand = Get-Command emulator -ErrorAction Stop
                 $sdkRoot = Split-Path $emulatorCommand.Source -Parent | Split-Path -Parent
 
@@ -282,6 +306,8 @@ services:
                 Write-Host "Iniciando emulador $avdToStart"
                 Write-Host "=========================================="
 
+                Restart-AdbServer
+
                 Start-Process -FilePath "emulator" -ArgumentList @(
                     "-avd", $avdToStart,
                     "-no-snapshot-load",
@@ -291,16 +317,41 @@ services:
                     "-gpu", "swiftshader_indirect"
                 ) | Out-Null
 
-                adb wait-for-device 2>$null | Out-Null
+                $adbConnected = $false
+                for ($attempt = 1; $attempt -le 6; $attempt++) {
+                    try {
+                        Write-Host "Aguardando emulador no adb (tentativa $attempt/6)..."
+                        Invoke-Adb -Arguments @('wait-for-device') | Out-Null
+                        $adbConnected = $true
+                        break
+                    }
+                    catch {
+                        Write-Host "Falha ao conectar adb: $($_.Exception.Message)"
+                        Restart-AdbServer
+                        Start-Sleep -Seconds 4
+                    }
+                }
+
+                if (-not $adbConnected) {
+                    throw "Nao foi possivel conectar o emulador no adb apos 6 tentativas."
+                }
 
                 $maxRetries = 60
                 for ($i = 0; $i -lt $maxRetries; $i++) {
-                    $boot = (adb shell getprop sys.boot_completed 2>$null).Trim()
+                    try {
+                        $boot = ((Invoke-Adb -Arguments @('shell', 'getprop', 'sys.boot_completed') -IgnoreExitCode) | Select-Object -First 1).ToString().Trim()
+                    }
+                    catch {
+                        $boot = ''
+                        Write-Host "Leitura de boot via adb falhou; tentando novamente..."
+                        Restart-AdbServer
+                    }
+
                     Write-Host "Boot status: $boot"
 
                     if ($boot -eq '1') {
                         Write-Host "Emulador pronto"
-                        adb shell input keyevent 82 | Out-Null
+                        Invoke-Adb -Arguments @('shell', 'input', 'keyevent', '82') -IgnoreExitCode | Out-Null
                         Write-Host "Emulador desbloqueado"
                         exit 0
                     }
