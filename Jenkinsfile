@@ -11,7 +11,7 @@ pipeline {
     }
 
     options {
-        timeout(time: 30, unit: 'MINUTES')
+        timeout(time: 60, unit: 'MINUTES')
     }
 
     stages {
@@ -181,12 +181,18 @@ services:
                 exit /b 0
                 '''
 
-                bat '''
-                cd ecommerce-mobile-app
+                powershell '''
+                $ErrorActionPreference = 'Stop'
 
-                start "Expo" cmd /c "set EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%&& echo EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL% > ../expo-server.log && npx expo start --clear --port 8081 --no-dev --minify >> ../expo-server.log 2>&1"
+                $expoAppDir = Join-Path $env:WORKSPACE 'ecommerce-mobile-app'
+                $expoLog = Join-Path $env:WORKSPACE 'expo-server.log'
 
-                exit /b 0
+                Set-Content -Path $expoLog -Value "EXPO_PUBLIC_API_URL=$env:EXPO_PUBLIC_API_URL" -Encoding ASCII
+
+                Start-Process -FilePath 'cmd.exe' -ArgumentList @(
+                    '/c',
+                    'set EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%&& npx expo start --clear --port 8081 --no-dev --minify 2>&1'
+                ) -WorkingDirectory $expoAppDir -WindowStyle Hidden -RedirectStandardOutput $expoLog | Out-Null
                 '''
 
                 bat '''
@@ -333,29 +339,48 @@ services:
                     "-gpu", "swiftshader_indirect"
                 ) | Out-Null
 
-                $adbConnected = $false
-                for ($attempt = 1; $attempt -le 6; $attempt++) {
+                Start-Sleep -Seconds 8
+
+                $emuSerial = $null
+                for ($attempt = 1; $attempt -le 12; $attempt++) {
                     try {
-                        Write-Host "Aguardando emulador no adb (tentativa $attempt/6)..."
-                        Invoke-Adb -Arguments @('wait-for-device') | Out-Null
-                        $adbConnected = $true
-                        break
+                        Write-Host "Aguardando emulador no adb (tentativa $attempt/12)..."
+
+                        $deviceLines = @(Invoke-Adb -Arguments @('devices') -IgnoreExitCode |
+                            Select-Object -Skip 1 |
+                            ForEach-Object { $_.ToString().Trim() } |
+                            Where-Object { $_ })
+
+                        $emulatorLines = @($deviceLines | Where-Object { $_.StartsWith('emulator-') -and $_.EndsWith('device') })
+
+                        if ($emulatorLines.Count -gt 0) {
+                            $normalizedLine = $emulatorLines[0].Replace("`t", " ")
+                            $emuSerial = $normalizedLine.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
+                            Write-Host "Emulador online no adb: $emuSerial"
+                            break
+                        }
+
+                        Write-Host 'Nenhum emulador online ainda no adb devices.'
                     }
                     catch {
-                        Write-Host "Falha ao conectar adb: $($_.Exception.Message)"
-                        Restart-AdbServer
-                        Start-Sleep -Seconds 4
+                        Write-Host "Falha ao listar adb devices: $($_.Exception.Message)"
                     }
+
+                    if (($attempt % 3) -eq 0) {
+                        Restart-AdbServer
+                    }
+
+                    Start-Sleep -Seconds 5
                 }
 
-                if (-not $adbConnected) {
-                    throw "Nao foi possivel conectar o emulador no adb apos 6 tentativas."
+                if (-not $emuSerial) {
+                    throw "Nao foi possivel detectar emulador online no adb apos 12 tentativas."
                 }
 
                 $maxRetries = 60
                 for ($i = 0; $i -lt $maxRetries; $i++) {
                     try {
-                        $boot = ((Invoke-Adb -Arguments @('shell', 'getprop', 'sys.boot_completed') -IgnoreExitCode) | Select-Object -First 1).ToString().Trim()
+                        $boot = ((Invoke-Adb -Arguments @('-s', $emuSerial, 'shell', 'getprop', 'sys.boot_completed') -IgnoreExitCode) | Select-Object -First 1).ToString().Trim()
                     }
                     catch {
                         $boot = ''
@@ -367,7 +392,7 @@ services:
 
                     if ($boot -eq '1') {
                         Write-Host "Emulador pronto"
-                        Invoke-Adb -Arguments @('shell', 'input', 'keyevent', '82') -IgnoreExitCode | Out-Null
+                        Invoke-Adb -Arguments @('-s', $emuSerial, 'shell', 'input', 'keyevent', '82') -IgnoreExitCode | Out-Null
                         Write-Host "Emulador desbloqueado"
                         exit 0
                     }
@@ -381,17 +406,51 @@ services:
                 powershell '''
                 $ErrorActionPreference = 'Stop'
 
+                function Invoke-Adb {
+                    param(
+                        [Parameter(Mandatory = $true)]
+                        [string[]]$Arguments,
+                        [switch]$IgnoreExitCode
+                    )
+
+                    $previousErrorActionPreference = $ErrorActionPreference
+                    $hasNativeCommandPreference = Test-Path variable:PSNativeCommandUseErrorActionPreference
+                    if ($hasNativeCommandPreference) {
+                        $previousNativeCommandPreference = $PSNativeCommandUseErrorActionPreference
+                        $PSNativeCommandUseErrorActionPreference = $false
+                    }
+
+                    $ErrorActionPreference = 'Continue'
+                    try {
+                        $output = & adb @Arguments 2>&1
+                        $exitCode = $LASTEXITCODE
+                    }
+                    finally {
+                        $ErrorActionPreference = $previousErrorActionPreference
+                        if ($hasNativeCommandPreference) {
+                            $PSNativeCommandUseErrorActionPreference = $previousNativeCommandPreference
+                        }
+                    }
+
+                    if (-not $IgnoreExitCode -and $exitCode -ne 0) {
+                        $joinedOutput = ($output | ForEach-Object { $_.ToString() }) -join "`n"
+                        throw "adb $($Arguments -join ' ') falhou (exit=$exitCode): $joinedOutput"
+                    }
+
+                    return $output
+                }
+
                 Write-Host "=========================================="
                 Write-Host "Validando emulador ativo"
                 Write-Host "=========================================="
 
-                adb start-server | Out-Null
+                Invoke-Adb -Arguments @('start-server') -IgnoreExitCode | Out-Null
 
                 $emuSerial = $null
                 $maxRetries = 24
 
                 for ($i = 0; $i -lt $maxRetries; $i++) {
-                    $deviceLines = @(adb devices | Select-Object -Skip 1 | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+                    $deviceLines = @(Invoke-Adb -Arguments @('devices') -IgnoreExitCode | Select-Object -Skip 1 | ForEach-Object { $_.ToString().Trim() } | Where-Object { $_ })
                     $emulatorLines = @($deviceLines | Where-Object { $_.StartsWith('emulator-') -and $_.EndsWith('device') })
 
                     if ($emulatorLines.Count -gt 0) {
@@ -405,14 +464,13 @@ services:
 
                 if (-not $emuSerial) {
                     Write-Host "Saida atual do adb devices:"
-                    adb devices
+                    Invoke-Adb -Arguments @('devices') -IgnoreExitCode | Out-Host
                     throw "Nenhum emulador Android online encontrado apos 2 minutos."
                 }
 
                 Write-Host "Emulador selecionado: $emuSerial"
-                adb -s $emuSerial wait-for-device | Out-Null
 
-                $packages = adb -s $emuSerial shell pm list packages
+                $packages = Invoke-Adb -Arguments @('-s', $emuSerial, 'shell', 'pm', 'list', 'packages')
                 $hasExpoGo = @($packages) -match 'host.exp.exponent'
 
                 if (-not $hasExpoGo) {
@@ -421,7 +479,7 @@ services:
                     Invoke-WebRequest -Uri 'https://d1ahtucjixef4r.cloudfront.net/Exponent-2.31.3.apk' -OutFile $apkPath -UseBasicParsing
 
                     Write-Host "Instalando Expo Go no emulador..."
-                    adb -s $emuSerial install -r $apkPath | Out-Host
+                    Invoke-Adb -Arguments @('-s', $emuSerial, 'install', '-r', $apkPath) -IgnoreExitCode | Out-Host
                 }
 
                 Write-Host "Expo Go instalado"
