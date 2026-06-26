@@ -9,6 +9,7 @@ pipeline {
         EXPO_PUBLIC_API_URL = 'http://10.0.2.2:3000/api'
         ANDROID_AVD         = 'Small_Phone'
         KEEP_EMULATOR_WARM  = 'true'
+        KEEP_EXPO_WARM      = 'true'
     }
 
     options {
@@ -173,23 +174,36 @@ services:
             }
             steps {
 
-                bat '''
-                @echo off
-                setlocal EnableDelayedExpansion
-
-                for /f "tokens=5" %%p in ('netstat -ano ^| findstr ":8081" ^| findstr "LISTENING"') do (
-                    echo Encerrando processo na porta 8081 ^(PID %%p^)...
-                    taskkill /PID %%p /F >nul 2>&1
-                )
-
-                exit /b 0
-                '''
-
                 powershell '''
                 $ErrorActionPreference = 'Stop'
 
                 $expoAppDir = Join-Path $env:WORKSPACE 'ecommerce-mobile-app'
                 $expoLog = Join-Path $env:WORKSPACE 'expo-server.log'
+                $expoReady = $false
+
+                try {
+                    $statusResponse = Invoke-WebRequest -Uri 'http://localhost:8081/status' -UseBasicParsing -TimeoutSec 3
+                    if ($statusResponse.StatusCode -eq 200) {
+                        $expoReady = $true
+                        Write-Host 'Expo ja esta respondendo em http://localhost:8081/status; reutilizando processo existente.'
+                    }
+                }
+                catch {
+                    Write-Host 'Expo ainda nao esta ativo; sera iniciado agora.'
+                }
+
+                if ($expoReady -and $env:KEEP_EXPO_WARM -eq 'true') {
+                    exit 0
+                }
+
+                Get-NetTCPConnection -LocalPort 8081 -State Listen -ErrorAction SilentlyContinue |
+                    Select-Object -ExpandProperty OwningProcess -Unique |
+                    ForEach-Object {
+                        Write-Host "Encerrando processo na porta 8081 (PID $_)..."
+                        Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue
+                    }
+
+                Start-Sleep -Seconds 2
 
                 Set-Content -Path $expoLog -Value "EXPO_PUBLIC_API_URL=$env:EXPO_PUBLIC_API_URL" -Encoding ASCII
 
@@ -199,33 +213,26 @@ services:
                 ) -WorkingDirectory $expoAppDir -WindowStyle Hidden -RedirectStandardOutput $expoLog | Out-Null
                 '''
 
-                bat '''
-                @echo off
-                setlocal EnableDelayedExpansion
+                powershell '''
+                $ErrorActionPreference = 'Stop'
 
-                set RETRY=0
+                $maxRetries = 10
+                for ($i = 0; $i -lt $maxRetries; $i++) {
+                    try {
+                        $statusResponse = Invoke-WebRequest -Uri 'http://localhost:8081/status' -UseBasicParsing -TimeoutSec 3
+                        if ($statusResponse.StatusCode -eq 200) {
+                            Write-Host 'Expo pronto'
+                            exit 0
+                        }
+                    }
+                    catch {
+                        Write-Host 'Aguardando Expo responder...'
+                    }
 
-                :loop
+                    Start-Sleep -Seconds 2
+                }
 
-                curl http://localhost:8081/status >nul 2>&1
-
-                if !ERRORLEVEL!==0 (
-                    echo Expo pronto
-                    goto end
-                )
-
-                set /A RETRY+=1
-
-                if !RETRY! GEQ 20 (
-                    echo Expo nao subiu
-                    exit /b 1
-                )
-
-                timeout /t 3 /nobreak >nul
-
-                goto loop
-
-                :end
+                throw 'Expo nao subiu na porta 8081.'
                 '''
 
                 powershell '''
@@ -1041,14 +1048,15 @@ services:
                              allowEmptyArchive: true
 
             script {
-                if (fileExists('allure-results')) {
-                    try {
-                        allure includeProperties: false,
-                               results: [[path: 'allure-results']]
-                    }
-                    catch (Throwable ex) {
-                        echo 'Allure Plugin nao encontrado no Jenkins. Resultados foram arquivados em allure-results.'
-                    }
+                if (fileExists('allure-report/index.html')) {
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'allure-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Allure Report'
+                    ])
                 }
             }
 
