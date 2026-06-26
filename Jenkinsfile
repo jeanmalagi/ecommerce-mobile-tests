@@ -248,7 +248,7 @@ services:
                         [Parameter(Mandatory = $true)]
                         [string[]]$Arguments,
                         [switch]$IgnoreExitCode,
-                        [int]$TimeoutSeconds = 30
+                        [int]$TimeoutSeconds = 8
                     )
 
                     $adbCommand = Get-Command adb -ErrorAction Stop
@@ -381,7 +381,7 @@ services:
                     Start-Sleep -Seconds 8
                 }
 
-                $detectAttempts = if ($emuSerial) { 1 } else { 12 }
+                $detectAttempts = if ($emuSerial) { 1 } else { 8 }
                 for ($attempt = 1; $attempt -le $detectAttempts; $attempt++) {
                     try {
                         if (-not $emuSerial) {
@@ -423,7 +423,7 @@ services:
                     throw "Nao foi possivel detectar emulador online no adb apos $detectAttempts tentativas."
                 }
 
-                $maxRetries = 60
+                $maxRetries = 24
                 for ($i = 0; $i -lt $maxRetries; $i++) {
                     try {
                         $boot = ((Invoke-Adb -Arguments @('-s', $emuSerial, 'shell', 'getprop', 'sys.boot_completed') -IgnoreExitCode) | Select-Object -First 1).ToString().Trim()
@@ -439,6 +439,7 @@ services:
                     if ($boot -eq '1') {
                         Write-Host "Emulador pronto"
                         Invoke-Adb -Arguments @('-s', $emuSerial, 'shell', 'input', 'keyevent', '82') -IgnoreExitCode | Out-Null
+                        Set-Content -Path '.emulator-serial.txt' -Value $emuSerial -Encoding ASCII
                         Write-Host "Emulador desbloqueado"
                         exit 0
                     }
@@ -457,7 +458,7 @@ services:
                         [Parameter(Mandatory = $true)]
                         [string[]]$Arguments,
                         [switch]$IgnoreExitCode,
-                        [int]$TimeoutSeconds = 30
+                        [int]$TimeoutSeconds = 8
                     )
 
                     $adbCommand = Get-Command adb -ErrorAction Stop
@@ -510,19 +511,37 @@ services:
                 Invoke-Adb -Arguments @('start-server') -IgnoreExitCode | Out-Null
 
                 $emuSerial = $null
-                $maxRetries = 24
-
-                for ($i = 0; $i -lt $maxRetries; $i++) {
-                    $deviceLines = @(Invoke-Adb -Arguments @('devices') -IgnoreExitCode | Select-Object -Skip 1 | ForEach-Object { $_.ToString().Trim() } | Where-Object { $_ })
-                    $emulatorLines = @($deviceLines | Where-Object { $_.StartsWith('emulator-') -and $_.EndsWith('device') })
-
-                    if ($emulatorLines.Count -gt 0) {
-                        $normalizedLine = $emulatorLines[0].Replace("`t", " ")
-                        $emuSerial = $normalizedLine.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
-                        break
+                if (Test-Path '.emulator-serial.txt') {
+                    $cachedSerial = (Get-Content -Path '.emulator-serial.txt' -ErrorAction SilentlyContinue | Select-Object -First 1).Trim()
+                    if ($cachedSerial) {
+                        try {
+                            $state = ((Invoke-Adb -Arguments @('-s', $cachedSerial, 'get-state') -IgnoreExitCode) | Select-Object -First 1).ToString().Trim()
+                            if ($state -eq 'device') {
+                                $emuSerial = $cachedSerial
+                                Write-Host "Reutilizando serial de emulador em cache: $emuSerial"
+                            }
+                        }
+                        catch {
+                            Write-Host "Serial em cache invalido, buscando novamente via adb devices..."
+                        }
                     }
+                }
 
-                    Start-Sleep -Seconds 5
+                $maxRetries = 8
+
+                if (-not $emuSerial) {
+                    for ($i = 0; $i -lt $maxRetries; $i++) {
+                        $deviceLines = @(Invoke-Adb -Arguments @('devices') -IgnoreExitCode | Select-Object -Skip 1 | ForEach-Object { $_.ToString().Trim() } | Where-Object { $_ })
+                        $emulatorLines = @($deviceLines | Where-Object { $_.StartsWith('emulator-') -and $_.EndsWith('device') })
+
+                        if ($emulatorLines.Count -gt 0) {
+                            $normalizedLine = $emulatorLines[0].Replace("`t", " ")
+                            $emuSerial = $normalizedLine.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
+                            break
+                        }
+
+                        Start-Sleep -Seconds 3
+                    }
                 }
 
                 if (-not $emuSerial) {
