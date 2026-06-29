@@ -1084,6 +1084,18 @@ services:
                              allowEmptyArchive: true
 
             script {
+                if (fileExists('allure-results')) {
+                    try {
+                        allure includeProperties: false,
+                               results: [[path: 'allure-results']]
+                    }
+                    catch (err) {
+                        echo "Allure plugin indisponivel ou com erro na publicacao: ${err.message}"
+                    }
+                }
+            }
+
+            script {
                 if (fileExists('allure-report/index.html')) {
                     publishHTML(target: [
                         allowMissing: true,
