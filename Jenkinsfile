@@ -214,9 +214,9 @@ services:
                 Set-Content -Path $expoLog -Value "EXPO_PUBLIC_API_URL=$env:EXPO_PUBLIC_API_URL" -Encoding ASCII
 
                 $expoCommand = @(
-                    'set EXPO_NO_INTERACTIVE=true',
-                    'set CI=true',
-                    'set EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%',
+                    'set "EXPO_NO_INTERACTIVE=true"',
+                    'set "CI=true"',
+                    'set "EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%"',
                     ('"{0}" start --clear --port 8081 --no-dev --minify >> "{1}" 2>&1' -f $expoCli, $expoLog)
                 ) -join ' && '
 
