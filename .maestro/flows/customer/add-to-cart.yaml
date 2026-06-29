@@ -8,7 +8,7 @@ appId: host.exp.exponent
 
 - extendedWaitUntil:
     visible: "Bem-vindo de volta"
-  timeout: 60000
+    timeout: 60000
 
 - runFlow: ../_helpers/login-as-customer.yaml
 
