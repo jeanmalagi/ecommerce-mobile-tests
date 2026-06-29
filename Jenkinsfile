@@ -306,6 +306,9 @@ services:
 
                         $output = @($stdout + $stderr)
                         $exitCode = $process.ExitCode
+                        if ($null -eq $exitCode) {
+                            $exitCode = 0
+                        }
                     }
                     finally {
                         Remove-Item -Path $stdoutFile, $stderrFile -Force -ErrorAction SilentlyContinue
@@ -313,6 +316,18 @@ services:
 
                     if (-not $IgnoreExitCode -and $exitCode -ne 0) {
                         $joinedOutput = ($output | ForEach-Object { $_.ToString() }) -join "`n"
+
+                        $isStartServer = (($Arguments -join ' ') -eq 'start-server')
+                        $normalizedOutput = $joinedOutput.ToLowerInvariant()
+                        $isAdbBootstrapMessage = $isStartServer -and (
+                            $normalizedOutput.Contains('daemon not running') -or
+                            $normalizedOutput.Contains('daemon started successfully')
+                        )
+
+                        if ($isAdbBootstrapMessage) {
+                            return $output
+                        }
+
                         throw "adb $($Arguments -join ' ') falhou (exit=$exitCode): $joinedOutput"
                     }
 
@@ -322,7 +337,7 @@ services:
                 function Restart-AdbServer {
                     Invoke-Adb -Arguments @('kill-server') -IgnoreExitCode | Out-Null
                     Start-Sleep -Seconds 2
-                    Invoke-Adb -Arguments @('start-server') | Out-Null
+                    Invoke-Adb -Arguments @('start-server') -IgnoreExitCode | Out-Null
                 }
 
                 $emulatorCommand = Get-Command emulator -ErrorAction Stop
@@ -516,6 +531,9 @@ services:
 
                         $output = @($stdout + $stderr)
                         $exitCode = $process.ExitCode
+                        if ($null -eq $exitCode) {
+                            $exitCode = 0
+                        }
                     }
                     finally {
                         Remove-Item -Path $stdoutFile, $stderrFile -Force -ErrorAction SilentlyContinue
