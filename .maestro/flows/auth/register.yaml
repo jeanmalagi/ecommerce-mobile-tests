@@ -29,20 +29,33 @@ appId: host.exp.exponent
 - evalScript: ${output.registerEmail = 'usuario.teste+' + Date.now() + '@email.com'}
 - tapOn:
     id: "register-input-nome"
+- eraseText
 - inputText: "Usuario Teste"
 - hideKeyboard
 
 - tapOn:
     id: "register-input-email"
+- eraseText
 - inputText: ${output.registerEmail}
 - hideKeyboard
 
 - tapOn:
     id: "register-input-senha"
+- eraseText
 - inputText: "123456"
 - hideKeyboard
 
-- tapOn: "Cadastrar"
+- tapOn:
+    id: "btn-cadastrar"
+    optional: true
+- tapOn:
+    text: "Cadastrar"
+    optional: true
+
+- extendedWaitUntil:
+    visible: "Conta criada com sucesso"
+    timeout: 30000
+
 - assertVisible: "Conta criada com sucesso"
 - tapOn:
     text: "OK"
