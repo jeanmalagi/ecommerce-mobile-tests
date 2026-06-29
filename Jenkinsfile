@@ -1086,10 +1086,13 @@ services:
             script {
                 if (fileExists('allure-results')) {
                     try {
-                        allure includeProperties: false,
-                               results: [[path: 'allure-results']]
+                        step([
+                            $class: 'AllureReportPublisher',
+                            includeProperties: false,
+                            results: [[path: 'allure-results']]
+                        ])
                     }
-                    catch (err) {
+                    catch (Throwable err) {
                         echo "Allure plugin indisponivel ou com erro na publicacao: ${err.message}"
                     }
                 }
