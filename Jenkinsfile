@@ -214,10 +214,10 @@ services:
                 Set-Content -Path $expoLog -Value "EXPO_PUBLIC_API_URL=$env:EXPO_PUBLIC_API_URL" -Encoding ASCII
 
                 $expoCommand = @(
-                    'set EXPO_NO_INTERACTIVE=1',
-                    'set CI=1',
+                    'set EXPO_NO_INTERACTIVE=true',
+                    'set CI=true',
                     'set EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%',
-                    ('"{0}" start --clear --port 8081 --non-interactive --no-dev --minify >> "{1}" 2>&1' -f $expoCli, $expoLog)
+                    ('"{0}" start --clear --port 8081 --no-dev --minify >> "{1}" 2>&1' -f $expoCli, $expoLog)
                 ) -join ' && '
 
                 $expoProcess = Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', $expoCommand) -WorkingDirectory $expoAppDir -WindowStyle Hidden -PassThru
