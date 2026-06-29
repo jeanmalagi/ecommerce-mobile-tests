@@ -179,7 +179,13 @@ services:
 
                 $expoAppDir = Join-Path $env:WORKSPACE 'ecommerce-mobile-app'
                 $expoLog = Join-Path $env:WORKSPACE 'expo-server.log'
+                $expoPidFile = Join-Path $env:WORKSPACE '.expo-server.pid'
+                $expoCli = Join-Path $expoAppDir 'node_modules/.bin/expo.cmd'
                 $expoReady = $false
+
+                if (-not (Test-Path $expoCli)) {
+                    throw "Expo CLI nao encontrado em $expoCli. Garanta que 'npm install' foi executado em ecommerce-mobile-app."
+                }
 
                 try {
                     $statusResponse = Invoke-WebRequest -Uri 'http://localhost:8081/status' -UseBasicParsing -TimeoutSec 3
@@ -207,16 +213,23 @@ services:
 
                 Set-Content -Path $expoLog -Value "EXPO_PUBLIC_API_URL=$env:EXPO_PUBLIC_API_URL" -Encoding ASCII
 
-                Start-Process -FilePath 'cmd.exe' -ArgumentList @(
-                    '/c',
-                    'set EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%&& npx expo start --clear --port 8081 --no-dev --minify 2>&1'
-                ) -WorkingDirectory $expoAppDir -WindowStyle Hidden -RedirectStandardOutput $expoLog | Out-Null
+                $expoCommand = @(
+                    'set EXPO_NO_INTERACTIVE=1',
+                    'set CI=1',
+                    'set EXPO_PUBLIC_API_URL=%EXPO_PUBLIC_API_URL%',
+                    ('"{0}" start --clear --port 8081 --non-interactive --no-dev --minify >> "{1}" 2>&1' -f $expoCli, $expoLog)
+                ) -join ' && '
+
+                $expoProcess = Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', $expoCommand) -WorkingDirectory $expoAppDir -WindowStyle Hidden -PassThru
+                Set-Content -Path $expoPidFile -Value $expoProcess.Id -Encoding ASCII
+                Write-Host "Expo iniciado em background (PID=$($expoProcess.Id))."
                 '''
 
                 powershell '''
                 $ErrorActionPreference = 'Stop'
 
-                $maxRetries = 10
+                $expoLog = Join-Path $env:WORKSPACE 'expo-server.log'
+                $maxRetries = 45
                 for ($i = 0; $i -lt $maxRetries; $i++) {
                     try {
                         $statusResponse = Invoke-WebRequest -Uri 'http://localhost:8081/status' -UseBasicParsing -TimeoutSec 3
@@ -230,6 +243,11 @@ services:
                     }
 
                     Start-Sleep -Seconds 2
+                }
+
+                if (Test-Path $expoLog) {
+                    Write-Host 'Ultimas linhas do log do Expo:'
+                    Get-Content -Path $expoLog -Tail 120 -ErrorAction SilentlyContinue | Out-Host
                 }
 
                 throw 'Expo nao subiu na porta 8081.'
