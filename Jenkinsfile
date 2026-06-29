@@ -986,14 +986,16 @@ services:
                     Remove-Item -Path 'allure-report' -Recurse -Force
                 }
 
-                Write-Host "Gerando relatorio HTML local em allure-report..."
-                & $allureExecutable generate allure-results --clean -o allure-report | Out-Host
+                New-Item -ItemType Directory -Path 'allure-report/mobile' -Force | Out-Null
 
-                if (-not (Test-Path 'allure-report/index.html')) {
-                    throw 'Allure report nao gerou allure-report/index.html.'
+                Write-Host "Gerando relatorio HTML local em allure-report/mobile (single-file)..."
+                & $allureExecutable generate allure-results --clean -o allure-report/mobile --single-file | Out-Host
+
+                if (-not (Test-Path 'allure-report/mobile/index.html')) {
+                    throw 'Allure report nao gerou allure-report/mobile/index.html.'
                 }
 
-                Write-Host 'Allure HTML pronto: allure-report/index.html'
+                Write-Host 'Allure HTML pronto: allure-report/mobile/index.html'
                 '''
             }
         }
@@ -1084,27 +1086,12 @@ services:
                              allowEmptyArchive: true
 
             script {
-                if (fileExists('allure-results')) {
-                    try {
-                        step([
-                            $class: 'AllureReportPublisher',
-                            includeProperties: false,
-                            results: [[path: 'allure-results']]
-                        ])
-                    }
-                    catch (Throwable err) {
-                        echo "Allure plugin indisponivel ou com erro na publicacao: ${err.message}"
-                    }
-                }
-            }
-
-            script {
-                if (fileExists('allure-report/index.html')) {
+                if (fileExists('allure-report/mobile/index.html')) {
                     publishHTML(target: [
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,
                         keepAll: true,
-                        reportDir: 'allure-report',
+                        reportDir: 'allure-report/mobile',
                         reportFiles: 'index.html',
                         reportName: 'Allure Report'
                     ])
